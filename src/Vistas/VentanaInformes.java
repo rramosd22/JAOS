@@ -38,7 +38,7 @@ public class VentanaInformes extends javax.swing.JFrame {
     public DefaultListModel modlistCategorias;
     public DefaultListModel modlistInformes;
     public Calendar cale;
-    public SimpleDateFormat sdf;  
+    public SimpleDateFormat sdf;
     public Descripcioninformespdf informe;
 
     public javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
@@ -329,7 +329,8 @@ public class VentanaInformes extends javax.swing.JFrame {
 
                 list.put("fini", fechai);
                 list.put("ffin", fechaf);
-                list.put("chAusentes", chAusentes);///Ausentes
+                list.put("chAusentes", chAusentes);
+                ///Ausentes
                 list.put("chCancelados", chCancelados);//CAncelados
                 list.put("chAtendidos", chAtendidos);//Atendidos
             }
@@ -504,6 +505,22 @@ public class VentanaInformes extends javax.swing.JFrame {
                 }
 
                 list.put("idpac", lblIdPaciente.getText());
+            } else if(inf == 6) {
+                
+                String initialDate = getDateByControl(jdFechainicial);
+                String finalDate = getDateByControl(jdFechafinal);
+
+                if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
+                    JOptionPane.showMessageDialog(
+                            null, MESSAGE_DATES_NOT_SET
+                    );
+                    return;
+                }
+
+                list.put("fini", initialDate);
+                list.put("ffin", finalDate);
+
+                System.out.println("map: " + list.toString());
             }
         } else if (cat == 3) {
             if (inf == 0) {//Pacientes Auxiliares
@@ -614,6 +631,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         listainformes.add(new String[]{"2", "3", "Recaudo por Mes"});
         listainformes.add(new String[]{"2", "4", "Recaudo Tipo Pago"});
         listainformes.add(new String[]{"2", "5", "Abono por Pacientes"});
+        listainformes.add(new String[]{"2", "6", "Nuevo Reporte"});
         listainformes.add(new String[]{"3", "0", "Pacientes Auxiliares"});
         listainformes.add(new String[]{"3", "1", "Pacientes Activos"});
         //listainformes.add(new String[]{"3","2","Pacientes Terminados"});
@@ -728,6 +746,8 @@ public class VentanaInformes extends javax.swing.JFrame {
                 MostrarOpcTpoPago();
             } else if (indI == 5) {//Abono por Pacientes
                 MostrarOpcHistCitas();
+            } else if (indI == 6) {//Nuevo Reporte
+                MostrarNuevoReporte();
             }
         } else if (indC == 3) {////Paciente
             if (indI == 0) { //Pacientes Auxiliares
@@ -1565,6 +1585,67 @@ public class VentanaInformes extends javax.swing.JFrame {
         }
     }
 
+    private void MostrarNuevoReporte() {
+        pintarFechaInicioFechaFin();
+    }
+
+    private void pintarFechaInicioFechaFin() {
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+            jLabel1.setForeground(new java.awt.Color(21, 67, 96));
+            jLabel1.setText("Opciones");
+
+            jdFechafinal.setForeground(new java.awt.Color(21, 67, 96));
+            jdFechainicial.setForeground(new java.awt.Color(21, 67, 96));
+            jdFechafinal.setDateFormatString("dd/MM/yyyy");
+
+            jdFechainicial.setDateFormatString("dd/MM/yyyy");
+            //rbInfohistorico.setText("Informe Historico");
+            //rbInfohistorico.setHorizontalTextPosition(SwingConstants.LEFT);
+            lblFechafinal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+            lblFechafinal.setForeground(new java.awt.Color(21, 67, 96));
+            lblFechafinal.setText("Fecha Fin:");
+
+            lblFechainicial.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+            lblFechainicial.setForeground(new java.awt.Color(21, 67, 96));
+            lblFechainicial.setText("Fecha Inicio:");
+
+            javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
+            PanelOpciones.setLayout(PanelOpcionesLayout);
+            PanelOpcionesLayout.setHorizontalGroup(
+                    PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(lblFechainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jdFechainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(32, 32, 32)
+                                    .addComponent(lblFechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jdFechafinal, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                                    .addContainerGap())
+                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                    .addGap(171, 171, 171)
+                                    .addComponent(jLabel1)
+                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            );
+            PanelOpcionesLayout.setVerticalGroup(
+                    PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                    .addGap(21, 21, 21)
+                                    .addComponent(jLabel1)
+                                    .addGap(32, 32, 32)
+                                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jdFechainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(lblFechainicial)
+                                                    .addComponent(jdFechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                                                    .addGap(15, 15, 15)
+                                                    .addComponent(lblFechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addContainerGap(277, Short.MAX_VALUE))
+            );
+    }
+
     private String getDateByControl(JDateChooser jdc) {
 
         return jdc.getCalendar() == null
@@ -1577,7 +1658,7 @@ public class VentanaInformes extends javax.swing.JFrame {
 
         List<String> emptyDates = new ArrayList<>();
         for (String emptyDate : listOfDates) {
-            if(emptyDate.equals("")){
+            if (emptyDate.equals("")) {
                 emptyDates.add(emptyDate);
             }
         }

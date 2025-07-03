@@ -203,6 +203,8 @@ public class Descripcioninformespdf {
                 titulo = "Recaudo Tipo Pago";
             } else if (categoria == 2 && informe == 5) {
                 titulo = "Abonos por Paciente";
+            } else if (categoria == 2 && informe == 6) {
+                titulo = "Nuevo Reporte Entre Fechas";
             } else if (categoria == 3 && informe == 0) {
                 titulo = "Pacientes Auxiliares";
             } else if (categoria == 3 && informe == 1) {
@@ -280,6 +282,8 @@ public class Descripcioninformespdf {
                 infFactrectp(documento, list);
             } else if (categoria == 2 && informe == 5) {
                 infFactabonoxpac(documento, list);
+            } else if (categoria == 2 && informe == 6) {
+                infoNuevoReporte(documento, list);
             } else if (categoria == 3 && informe == 0) {
                 pacientAuxi(documento, list);
             } else if (categoria == 3 && informe == 1) {
@@ -4511,6 +4515,60 @@ public class Descripcioninformespdf {
         }
     }
 
+    private void infoNuevoReporte(Document documento, Map<String, String> list) {
+        try {
+            PdfPCell celda = null;
+            
+            String cons = "SELECT *,TIMESTAMPDIFF(YEAR,pe.fecha_de_nacimiento, CURDATE()) AS edad "
+                    + "FROM facturas a JOIN pagos p ON p.pk_pago = a.`numero` JOIN modo_pago mp "
+                    + "ON mp.`pfk_pago`=p.`pk_pago` JOIN seguimiento_del_tratamiento st ON "
+                    + "a.pfk_paciente=st.`pfk_paciente` AND a.`fecha_pago` "
+                    + "BETWEEN DATE_ADD(st.`fecha_seguimiento`, INTERVAL -4 DAY) AND "
+                    + "DATE_ADD(st.`fecha_seguimiento`, INTERVAL 4 DAY) JOIN personas pe ON "
+                    + "a.`pfk_paciente`=CONCAT(pe.pfk_tipo_documento,pe.pk_persona) WHERE "
+                    + "a.`fecha_pago` BETWEEN '"+list.get("fini")+"' AND '"+list.get("ffin")+"';";
+
+            List<Map<String, String>> listaDatos = resultquery.ListSQL(cons);
+            System.out.println("cantidad de datos datos: " + listaDatos.size());
+
+            if (listaDatos.size() == 1) {
+                float[] tam = new float[]{5, 45, 25, 25};
+                PdfPTable tabla = new PdfPTable(tam);
+                tabla.setWidthPercentage(100);
+                celda = new PdfPCell(new Phrase("N°", pdf.font10n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setBorder(15);
+                tabla.addCell(celda);
+                celda = new PdfPCell(new Phrase("NOMBRE", pdf.font10n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setBorder(15);
+                tabla.addCell(celda);
+                celda = new PdfPCell(new Phrase("N° FACTURA", pdf.font10n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setBorder(15);
+                tabla.addCell(celda);
+                celda = new PdfPCell(new Phrase("VALOR PAGADO", pdf.font10n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setBorder(15);
+                tabla.addCell(celda);
+            }
+
+            IMPRIMIR("Informe creado!");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            IMPRIMIR("Error creando el informe");
+        }
+    }
+    
     private void pacientAuxi(Document documento, Map<String, String> list) {
         try {
             IMPRIMIR("+++++ ENTRE?");
