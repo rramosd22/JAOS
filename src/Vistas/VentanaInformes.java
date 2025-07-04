@@ -67,6 +67,19 @@ public class VentanaInformes extends javax.swing.JFrame {
     public javax.swing.JCheckBox chFotografia = new javax.swing.JCheckBox();
     public javax.swing.JCheckBox chCefalometricoTodas = new javax.swing.JCheckBox();
     public javax.swing.JCheckBox chCefalometrico = new javax.swing.JCheckBox();
+    
+    private javax.swing.ButtonGroup bgOrientacionHoja;
+    private javax.swing.JCheckBox chkEfectivo;
+    private javax.swing.JCheckBox chkTarjeta;
+    private com.toedter.calendar.JDateChooser jdcFechaFin;
+    private com.toedter.calendar.JDateChooser jdcFechaInicio;
+    private javax.swing.JLabel lblFechaFin;
+    private javax.swing.JLabel lblFechaInicio;
+    private javax.swing.JLabel lblMedioPago;
+    private javax.swing.JLabel lblOrientacionHoja;
+    private javax.swing.JLabel lblTituloGeneral;
+    private javax.swing.JRadioButton rbHorizontal;
+    private javax.swing.JRadioButton rbVertical;
     private int x, y;
 
     /**
@@ -505,10 +518,13 @@ public class VentanaInformes extends javax.swing.JFrame {
                 }
 
                 list.put("idpac", lblIdPaciente.getText());
-            } else if(inf == 6) {
-                
-                String initialDate = getDateByControl(jdFechainicial);
-                String finalDate = getDateByControl(jdFechafinal);
+            } else if (inf == 6) {
+
+                String initialDate = getDateByControl(jdcFechaInicio);
+                String finalDate = getDateByControl(jdcFechaFin);
+                String esEfectivo = String.valueOf(chkEfectivo.isSelected());
+                String esTarjeta = String.valueOf(chkTarjeta.isSelected());
+                String orientacion = Utilidades.getSelectedButtonText(bgOrientacionHoja);
 
                 if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
                     JOptionPane.showMessageDialog(
@@ -519,6 +535,9 @@ public class VentanaInformes extends javax.swing.JFrame {
 
                 list.put("fini", initialDate);
                 list.put("ffin", finalDate);
+                list.put("efectivo", esEfectivo);
+                list.put("tarjeta", esTarjeta);
+                list.put("orientacion", orientacion);
 
                 System.out.println("map: " + list.toString());
             }
@@ -724,7 +743,8 @@ public class VentanaInformes extends javax.swing.JFrame {
             } else if (indI == 2) {//Demanda Inducida
                 MostrarOpcDemandaInd();
             }
-        } else if (indC == 1) {////Historia Clinica
+        } else if (indC == 1) {
+            ////Historia Clinica
             if (indI == 0) { //imprimir historia clinica
                 MostrarOpcHistClinica();
             } else if (indI == 1) {//Historias cerradas  
@@ -733,7 +753,8 @@ public class VentanaInformes extends javax.swing.JFrame {
 //            else if (indI == 2){//Historias inactivas
 //                MostrarOpcHistCerradas();
 //            }
-        } else if (indC == 2) {////Factura
+        } else if (indC == 2) {
+            ////Factura
             if (indI == 0) { //Estados
                 MostrarOpcEstados();
             } else if (indI == 1) {//Facturas por Mes
@@ -749,7 +770,8 @@ public class VentanaInformes extends javax.swing.JFrame {
             } else if (indI == 6) {//Nuevo Reporte
                 MostrarNuevoReporte();
             }
-        } else if (indC == 3) {////Paciente
+        } else if (indC == 3) {
+            ////Paciente
             if (indI == 0) { //Pacientes Auxiliares
                 MostrarOpcPacAux();
             }
@@ -1586,64 +1608,127 @@ public class VentanaInformes extends javax.swing.JFrame {
     }
 
     private void MostrarNuevoReporte() {
-        pintarFechaInicioFechaFin();
+        pintarVistaInforme();
     }
 
-    private void pintarFechaInicioFechaFin() {
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-            jLabel1.setForeground(new java.awt.Color(21, 67, 96));
-            jLabel1.setText("Opciones");
+    private void pintarVistaInforme() {
+        bgOrientacionHoja = new javax.swing.ButtonGroup();
+        lblTituloGeneral = new javax.swing.JLabel();
+        lblFechaInicio = new javax.swing.JLabel();
+        jdcFechaInicio = new com.toedter.calendar.JDateChooser();
+        jdcFechaFin = new com.toedter.calendar.JDateChooser();
+        lblFechaFin = new javax.swing.JLabel();
+        lblMedioPago = new javax.swing.JLabel();
+        chkEfectivo = new javax.swing.JCheckBox();
+        chkTarjeta = new javax.swing.JCheckBox();
+        rbHorizontal = new javax.swing.JRadioButton();
+        rbVertical = new javax.swing.JRadioButton();
+        lblOrientacionHoja = new javax.swing.JLabel();
+        
+        PanelOpciones.setBackground(new java.awt.Color(255, 255, 255));
+        PanelOpciones.setForeground(new java.awt.Color(21, 67, 96));
+        PanelOpciones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-            jdFechafinal.setForeground(new java.awt.Color(21, 67, 96));
-            jdFechainicial.setForeground(new java.awt.Color(21, 67, 96));
-            jdFechafinal.setDateFormatString("dd/MM/yyyy");
+        lblTituloGeneral.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lblTituloGeneral.setForeground(new java.awt.Color(21, 67, 96));
+        lblTituloGeneral.setText("Opciones");
 
-            jdFechainicial.setDateFormatString("dd/MM/yyyy");
-            //rbInfohistorico.setText("Informe Historico");
-            //rbInfohistorico.setHorizontalTextPosition(SwingConstants.LEFT);
-            lblFechafinal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-            lblFechafinal.setForeground(new java.awt.Color(21, 67, 96));
-            lblFechafinal.setText("Fecha Fin:");
+        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFechaInicio.setForeground(new java.awt.Color(21, 67, 96));
+        lblFechaInicio.setText("Fecha Inicio");
 
-            lblFechainicial.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-            lblFechainicial.setForeground(new java.awt.Color(21, 67, 96));
-            lblFechainicial.setText("Fecha Inicio:");
+        jdcFechaInicio.setForeground(new java.awt.Color(21, 67, 96));
 
-            javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
-            PanelOpciones.setLayout(PanelOpcionesLayout);
-            PanelOpcionesLayout.setHorizontalGroup(
-                    PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jdcFechaFin.setForeground(new java.awt.Color(21, 67, 96));
+
+        lblFechaFin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFechaFin.setForeground(new java.awt.Color(21, 67, 96));
+        lblFechaFin.setText("Fecha Fin");
+
+        lblMedioPago.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMedioPago.setForeground(new java.awt.Color(21, 67, 96));
+        lblMedioPago.setText("Medio de Pago");
+
+        chkEfectivo.setText("Efectivo");
+
+        chkTarjeta.setText("Tarjeta");
+
+        lblOrientacionHoja.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblOrientacionHoja.setForeground(new java.awt.Color(21, 67, 96));
+        lblOrientacionHoja.setText("Orientacion de la Hoja");
+
+        bgOrientacionHoja.add(rbVertical);
+        rbVertical.setSelected(true);
+        rbVertical.setText("Vertical");
+        
+        bgOrientacionHoja.add(rbHorizontal);
+        rbHorizontal.setText("Horizontal");
+
+        javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
+        PanelOpciones.setLayout(PanelOpcionesLayout);
+        PanelOpcionesLayout.setHorizontalGroup(
+            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
+                    .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addComponent(lblFechainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jdFechainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(32, 32, 32)
-                                    .addComponent(lblFechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jdFechafinal, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                                    .addContainerGap())
+                                .addGap(171, 171, 171)
+                                .addComponent(lblTituloGeneral))
                             .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                    .addGap(171, 171, 171)
-                                    .addComponent(jLabel1)
-                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            );
-            PanelOpcionesLayout.setVerticalGroup(
-                    PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addContainerGap()
+                                .addComponent(lblMedioPago)
+                                .addGap(18, 18, 18)
+                                .addComponent(chkEfectivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(chkTarjeta))
                             .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                    .addGap(21, 21, 21)
-                                    .addComponent(jLabel1)
-                                    .addGap(32, 32, 32)
-                                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(jdFechainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(lblFechainicial)
-                                                    .addComponent(jdFechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
-                                                    .addGap(15, 15, 15)
-                                                    .addComponent(lblFechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addContainerGap(277, Short.MAX_VALUE))
-            );
+                                .addContainerGap()
+                                .addComponent(lblOrientacionHoja)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbVertical)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rbHorizontal)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        PanelOpcionesLayout.setVerticalGroup(
+            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(lblTituloGeneral)
+                .addGap(32, 32, 32)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFechaInicio)
+                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMedioPago)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(chkEfectivo)
+                        .addComponent(chkTarjeta)))
+                .addGap(18, 18, 18)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblOrientacionHoja)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rbVertical)
+                        .addComponent(rbHorizontal)))
+                .addContainerGap(194, Short.MAX_VALUE))
+        );
     }
 
     private String getDateByControl(JDateChooser jdc) {

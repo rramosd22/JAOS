@@ -84,6 +84,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        bgOrientacionHoja = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -93,15 +94,17 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         listInformes = new javax.swing.JList();
         jSeparator1 = new javax.swing.JSeparator();
         PanelOpciones = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        lblTituloGeneral = new javax.swing.JLabel();
+        lblFechaInicio = new javax.swing.JLabel();
+        jdcFechaInicio = new com.toedter.calendar.JDateChooser();
+        jdcFechaFin = new com.toedter.calendar.JDateChooser();
+        lblFechaFin = new javax.swing.JLabel();
+        lblMedioPago = new javax.swing.JLabel();
+        chkEfectivo = new javax.swing.JCheckBox();
+        chkTarjeta = new javax.swing.JCheckBox();
+        rbHorizontal = new javax.swing.JRadioButton();
+        rbVertical = new javax.swing.JRadioButton();
+        lblOrientacionHoja = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -169,7 +172,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,36 +188,40 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         PanelOpciones.setForeground(new java.awt.Color(21, 67, 96));
         PanelOpciones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(21, 67, 96));
-        jLabel3.setText("Opciones");
+        lblTituloGeneral.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lblTituloGeneral.setForeground(new java.awt.Color(21, 67, 96));
+        lblTituloGeneral.setText("Opciones");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(21, 67, 96));
-        jLabel8.setText("Fecha Inicio");
+        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFechaInicio.setForeground(new java.awt.Color(21, 67, 96));
+        lblFechaInicio.setText("Fecha Inicio");
 
-        jDateChooser1.setForeground(new java.awt.Color(21, 67, 96));
+        jdcFechaInicio.setForeground(new java.awt.Color(21, 67, 96));
 
-        jDateChooser2.setForeground(new java.awt.Color(21, 67, 96));
+        jdcFechaFin.setForeground(new java.awt.Color(21, 67, 96));
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(21, 67, 96));
-        jLabel9.setText("Fecha Fin");
+        lblFechaFin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFechaFin.setForeground(new java.awt.Color(21, 67, 96));
+        lblFechaFin.setText("Fecha Fin");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(21, 67, 96));
-        jLabel7.setText("Filtro");
+        lblMedioPago.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMedioPago.setForeground(new java.awt.Color(21, 67, 96));
+        lblMedioPago.setText("Medio de Pago");
 
-        jCheckBox1.setText("Ausentes");
+        chkEfectivo.setText("Efectivo");
 
-        jCheckBox2.setText("Cancelados");
+        chkTarjeta.setText("Tarjeta");
 
-        jCheckBox3.setText("Atendidos");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
-            }
-        });
+        bgOrientacionHoja.add(rbHorizontal);
+        rbHorizontal.setText("Horizontal");
+
+        bgOrientacionHoja.add(rbVertical);
+        rbVertical.setSelected(true);
+        rbVertical.setText("Vertical");
+
+        lblOrientacionHoja.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblOrientacionHoja.setForeground(new java.awt.Color(21, 67, 96));
+        lblOrientacionHoja.setText("Orientacion de la Hoja");
 
         javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
         PanelOpciones.setLayout(PanelOpcionesLayout);
@@ -224,26 +231,32 @@ public class VentanaInformes1 extends javax.swing.JFrame {
                 .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelOpcionesLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
+                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
                     .addGroup(PanelOpcionesLayout.createSequentialGroup()
                         .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelOpcionesLayout.createSequentialGroup()
                                 .addGap(171, 171, 171)
-                                .addComponent(jLabel3))
+                                .addComponent(lblTituloGeneral))
                             .addGroup(PanelOpcionesLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel7)
-                                .addGap(48, 48, 48)
-                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox1)
-                                    .addComponent(jCheckBox3)
-                                    .addComponent(jCheckBox2))))
+                                .addComponent(lblMedioPago)
+                                .addGap(18, 18, 18)
+                                .addComponent(chkEfectivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(chkTarjeta))
+                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblOrientacionHoja)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbVertical)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rbHorizontal)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -251,25 +264,29 @@ public class VentanaInformes1 extends javax.swing.JFrame {
             PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelOpcionesLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel3)
+                .addComponent(lblTituloGeneral)
                 .addGap(32, 32, 32)
                 .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFechaInicio)
+                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jCheckBox1))
-                .addGap(15, 15, 15)
-                .addComponent(jCheckBox2)
+                    .addComponent(lblMedioPago)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(chkEfectivo)
+                        .addComponent(chkTarjeta)))
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBox3)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblOrientacionHoja)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rbVertical)
+                        .addComponent(rbHorizontal)))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
 
         jPanel1.add(PanelOpciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 430, 380));
@@ -288,7 +305,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/minimizar.png"))); // NOI18N
-        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
@@ -297,7 +314,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 30, 30));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cerrar_1.png"))); // NOI18N
-        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
@@ -362,10 +379,6 @@ public class VentanaInformes1 extends javax.swing.JFrame {
     private void jPanel4MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseDragged
         this.setLocation(this.getLocation().x + evt.getX()-x, this.getLocation().y + evt.getY()-y);
     }//GEN-LAST:event_jPanel4MouseDragged
-
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     public void GenerarN(){
         int cat = listCategoria.getSelectedIndex();
@@ -553,20 +566,14 @@ public class VentanaInformes1 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelOpciones;
+    private javax.swing.ButtonGroup bgOrientacionHoja;
     private javax.swing.JButton btnGenerar;
+    private javax.swing.JCheckBox chkEfectivo;
+    private javax.swing.JCheckBox chkTarjeta;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -575,8 +582,17 @@ public class VentanaInformes1 extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private com.toedter.calendar.JDateChooser jdcFechaFin;
+    private com.toedter.calendar.JDateChooser jdcFechaInicio;
+    private javax.swing.JLabel lblFechaFin;
+    private javax.swing.JLabel lblFechaInicio;
+    private javax.swing.JLabel lblMedioPago;
+    private javax.swing.JLabel lblOrientacionHoja;
+    private javax.swing.JLabel lblTituloGeneral;
     private javax.swing.JList listCategoria;
     private javax.swing.JList listInformes;
+    private javax.swing.JRadioButton rbHorizontal;
+    private javax.swing.JRadioButton rbVertical;
     // End of variables declaration//GEN-END:variables
 
     
