@@ -8,6 +8,7 @@ package Informes;
 import BaseDeDatos.gestorMySQL;
 import Control.ControlGeneral;
 import Modelo.MediosDePago;
+import static Utilidades.Orientacion.HORIZONTAL;
 import Utilidades.Parametros;
 import Utilidades.Utilidades;
 import com.itextpdf.text.BaseColor;
@@ -182,6 +183,7 @@ public class Descripcioninformespdf {
             Rectangle papel = null;
             String titulo = "";
             String entidad = "", pac = "";
+            boolean esHorizontal = false;
             if (categoria == 0 && informe == 0) {
                 titulo = "Citas Diarias";
             } else if (categoria == 0 && informe == 1) {
@@ -210,6 +212,7 @@ public class Descripcioninformespdf {
             } else if (categoria == 2 && informe == 5) {
                 titulo = "Abonos por Paciente";
             } else if (categoria == 2 && informe == 6) {
+                esHorizontal = list.get("orientacion").equals(HORIZONTAL);
                 titulo = "Nuevo Reporte Entre Fechas";
             } else if (categoria == 3 && informe == 0) {
                 titulo = "Pacientes Auxiliares";
@@ -241,7 +244,7 @@ public class Descripcioninformespdf {
             //        }else{
             //            papel = PageSize.LEGAL;
             //        }
-            Document documento = new Document(papel);
+            Document documento = new Document(esHorizontal ? papel.rotate() : papel);
             PdfWriter writer = PdfWriter.getInstance(documento, archivo);
             writer.setPageEvent(new Informespdf(Encabezado));
 
@@ -4605,7 +4608,7 @@ public class Descripcioninformespdf {
                 celda.setBorder(15);
                 tabla.addCell(celda);
                 
-                
+                repetirEncabezadoPorCadaHoja(tabla);
                 
                 for(int i = 0; i < listaDatos.size(); i++){
                     celda = new PdfPCell(new Phrase(""+listaDatos.get(i).get("FECHASEG"), pdf.font8));
@@ -5127,6 +5130,10 @@ public class Descripcioninformespdf {
         }
         
         return result;
+    }
+
+    private void repetirEncabezadoPorCadaHoja(PdfPTable tabla) {
+        tabla.setHeaderRows(1);
     }
 
 }

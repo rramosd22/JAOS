@@ -73,6 +73,7 @@ public class VentanaInformes extends javax.swing.JFrame {
     private javax.swing.ButtonGroup bgOrientacionHoja;
     private javax.swing.JCheckBox chkEfectivo;
     private javax.swing.JCheckBox chkTarjeta;
+    private javax.swing.JCheckBox chkAgruparPaciente;
     private com.toedter.calendar.JDateChooser jdcFechaFin;
     private com.toedter.calendar.JDateChooser jdcFechaInicio;
     private javax.swing.JLabel lblFechaFin;
@@ -526,6 +527,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                 String finalDate = getDateByControl(jdcFechaFin);
                 String esEfectivo = String.valueOf(chkEfectivo.isSelected());
                 String esTarjeta = String.valueOf(chkTarjeta.isSelected());
+                String esAgrupado = String.valueOf(chkAgruparPaciente.isSelected());
                 String orientacion = Utilidades.getSelectedButtonText(bgOrientacionHoja);
                 
                 String mensaje = getMensajeDeValidacion(
@@ -543,6 +545,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                 list.put("efectivo", esEfectivo);
                 list.put("tarjeta", esTarjeta);
                 list.put("orientacion", orientacion);
+                list.put("agrupado", esAgrupado);
 
                 System.out.println("map: " + list.toString());
             }
@@ -1626,6 +1629,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         lblMedioPago = new javax.swing.JLabel();
         chkEfectivo = new javax.swing.JCheckBox();
         chkTarjeta = new javax.swing.JCheckBox();
+        chkAgruparPaciente = new javax.swing.JCheckBox();
         rbHorizontal = new javax.swing.JRadioButton();
         rbVertical = new javax.swing.JRadioButton();
         lblOrientacionHoja = new javax.swing.JLabel();
@@ -1669,6 +1673,8 @@ public class VentanaInformes extends javax.swing.JFrame {
         bgOrientacionHoja.add(rbHorizontal);
         rbHorizontal.setText("Horizontal");
 
+        chkAgruparPaciente.setText("Agrupar por Paciente");
+
         javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
         PanelOpciones.setLayout(PanelOpcionesLayout);
         PanelOpcionesLayout.setHorizontalGroup(
@@ -1676,7 +1682,7 @@ public class VentanaInformes extends javax.swing.JFrame {
             .addGroup(PanelOpcionesLayout.createSequentialGroup()
                 .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                        .addContainerGap()
+                .addContainerGap()
                         .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1705,6 +1711,10 @@ public class VentanaInformes extends javax.swing.JFrame {
                                 .addComponent(rbHorizontal)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkAgruparPaciente)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelOpcionesLayout.setVerticalGroup(
             PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1727,12 +1737,14 @@ public class VentanaInformes extends javax.swing.JFrame {
                         .addComponent(chkEfectivo)
                         .addComponent(chkTarjeta)))
                 .addGap(18, 18, 18)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblOrientacionHoja)
+                .addComponent(chkAgruparPaciente)
+                .addGap(18, 18, 18)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(rbVertical)
-                        .addComponent(rbHorizontal)))
-                .addContainerGap(194, Short.MAX_VALUE))
+                        .addComponent(rbHorizontal))
+                    .addComponent(lblOrientacionHoja))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
     }
 

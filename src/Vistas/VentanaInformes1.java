@@ -105,6 +105,8 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         rbHorizontal = new javax.swing.JRadioButton();
         rbVertical = new javax.swing.JRadioButton();
         lblOrientacionHoja = new javax.swing.JLabel();
+        chkAgruparPaciente = new javax.swing.JCheckBox();
+        lblCargando = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -223,13 +225,24 @@ public class VentanaInformes1 extends javax.swing.JFrame {
         lblOrientacionHoja.setForeground(new java.awt.Color(21, 67, 96));
         lblOrientacionHoja.setText("Orientacion de la Hoja");
 
+        chkAgruparPaciente.setText("Agrupar por Paciente");
+
+        lblCargando.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblCargando.setForeground(new java.awt.Color(21, 67, 96));
+        lblCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
         PanelOpciones.setLayout(PanelOpcionesLayout);
         PanelOpcionesLayout.setHorizontalGroup(
             PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkAgruparPaciente)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -238,7 +251,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
                         .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-                    .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
                         .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelOpcionesLayout.createSequentialGroup()
                                 .addGap(171, 171, 171)
@@ -281,12 +294,16 @@ public class VentanaInformes1 extends javax.swing.JFrame {
                         .addComponent(chkEfectivo)
                         .addComponent(chkTarjeta)))
                 .addGap(18, 18, 18)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblOrientacionHoja)
+                .addComponent(chkAgruparPaciente)
+                .addGap(18, 18, 18)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(rbVertical)
-                        .addComponent(rbHorizontal)))
-                .addContainerGap(194, Short.MAX_VALUE))
+                        .addComponent(rbHorizontal))
+                    .addComponent(lblOrientacionHoja))
+                .addGap(35, 35, 35)
+                .addComponent(lblCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         jPanel1.add(PanelOpciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 430, 380));
@@ -568,6 +585,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
     private javax.swing.JPanel PanelOpciones;
     private javax.swing.ButtonGroup bgOrientacionHoja;
     private javax.swing.JButton btnGenerar;
+    private javax.swing.JCheckBox chkAgruparPaciente;
     private javax.swing.JCheckBox chkEfectivo;
     private javax.swing.JCheckBox chkTarjeta;
     private javax.swing.JButton jButton1;
@@ -584,6 +602,7 @@ public class VentanaInformes1 extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private com.toedter.calendar.JDateChooser jdcFechaFin;
     private com.toedter.calendar.JDateChooser jdcFechaInicio;
+    private javax.swing.JLabel lblCargando;
     private javax.swing.JLabel lblFechaFin;
     private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JLabel lblMedioPago;
