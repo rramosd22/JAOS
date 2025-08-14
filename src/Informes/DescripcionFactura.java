@@ -746,7 +746,7 @@ public class DescripcionFactura {
             PdfPTable tabla = new PdfPTable(tam);
             tabla.setWidthPercentage(100);
             
-            Image m1 = Image.getInstance("Z:/Recursos/img/iconos/LOGO75.png");
+            Image m1 = Image.getInstance(Parametros.dirRecursos+"img/iconos/LOGO75.png");
             float m1w, m1h, m2w, m2h;
             m1w = m1h = m2w = m2h = 75;
             

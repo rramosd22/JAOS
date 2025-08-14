@@ -6,10 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -394,6 +398,168 @@ public class Utilidades {
             }
         }
         return null;
+    }
+    
+    public static List<Map<String, String>> data_list(int caso, List<Map<String, String>> lista, String[] datos) {
+        List<Map<String, String>> rlista = new ArrayList<>();
+        try {
+            switch (caso) {
+                case 1: {//para listar los datos por el dato enviado
+                    for (Map<String, String> lis : lista) {
+                        boolean encontro = false;
+                        for (Map<String, String> lr : rlista) {
+                            if (lis.get(datos[0]).equals(lr.get(datos[0]))) {
+                                encontro = true;
+                                break;
+                            }
+                        }
+                        if (!encontro) {
+                            rlista.add(lis);
+                        }
+                    }
+                    break;
+                }
+                case 10: {
+                    for (Map<String, String> lis : lista) {
+                        boolean encontro = false, enc = true;
+                        for (Map<String, String> lr : rlista) {
+                            boolean cond = false;
+                            for (int i = 0; i < datos.length; i++) {
+                                if (lis.get(datos[i]).equals("")) {
+                                    cond = true;
+                                    break;
+                                }
+                                if (i == 0) {
+                                    cond = lis.get(datos[i]).equals(lr.get(datos[i]));
+                                } else {
+                                    cond = cond && lis.get(datos[i]).equals(lr.get(datos[i]));
+                                }
+                            }
+                            if (cond) {
+                                encontro = true;
+                                break;
+                            }
+                        }
+                        if (!encontro) {
+                            rlista.add(lis);
+                        }
+                    }
+                    break;
+                }
+                case 2: {////para listar datos por la key mandada y el valor mandado
+                    for (Map<String, String> lis : lista) {
+                        if (lis.get(datos[0]).equals(datos[1])) {
+                            rlista.add(lis);
+                        }
+                    }
+                    break;
+                }
+
+                case 3: { //para listar los datos por los datos enviados de de la siguiente forma
+                    //k<->val, k<->val  
+                    // pfk_paciente<->CC1004120718, consecutivo<->20
+                    for (Map<String, String> lis : lista) {
+                        int coincidencias = 0;
+                        for (String prm : datos) {
+                            String[] item = prm.split("<->");
+                            if (lis.get(item[0]).equals(item[1])) {
+                                coincidencias++;
+                            }
+                        }
+                        if (coincidencias == datos.length) {
+                            rlista.add(lis);
+                        }
+                    }
+                    break;
+                }
+
+            }
+
+        } catch (Exception e) {
+        }
+        return rlista;
+    }
+
+    public static List<Map<String, String>> data_list(int caso, List<Map<String, String>> lista, String[] datos, String[] datos2) {
+        List<Map<String, String>> rlista = new ArrayList<>();
+        try {
+            switch (caso) {  //////////////LISTAR DATOS POR VECTOR dE COiNCIDENCIAS              
+                case 1: {//Distinct con where compuesto
+                    for (Map<String, String> lis : lista) {
+                        int coincidencias = 0;
+                        for (String prm : datos2) {
+                            String[] item = prm.split("<->");
+                            if (lis.get(item[0]).equals(item[1])) {
+                                coincidencias++;
+                            }
+                        }
+                        if (coincidencias == datos2.length) {
+                            boolean encontro = false;
+                            for (Map<String, String> lr : rlista) {
+
+                                if (lis.get(datos[0]).equals(lr.get(datos[0])) || lis.get(datos[0]).trim().equals("")) {
+                                    encontro = true;
+                                    break;
+                                }
+                            }
+                            if (!encontro && !lis.get(datos[0]).trim().equals("")) {
+                                rlista.add(lis);
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 10: {
+                    for (Map<String, String> lis : lista) {
+                        int coincidencias = 0;
+                        for (String prm : datos2) {
+                            String[] item = prm.split("<->");
+                            if (lis.get(item[0]).equals(item[1])) {
+                                coincidencias++;
+                            }
+                        }
+                        if (coincidencias == datos2.length) {
+                            boolean encontro = false, enc = true;
+                            for (Map<String, String> lr : rlista) {
+                                boolean cond = false;
+                                for (int i = 0; i < datos.length; i++) {
+                                    if (lis.get(datos[i]).equals("")) {
+                                        cond = true;
+                                        break;
+                                    }
+                                    if (i == 0) {
+                                        cond = lis.get(datos[i]).equals(lr.get(datos[i]));
+                                    } else {
+                                        cond = cond && lis.get(datos[i]).equals(lr.get(datos[i]));
+                                    }
+                                }
+                                if (cond) {
+                                    encontro = true;
+                                    break;
+                                }
+                            }
+                            if (!encontro) {
+                                rlista.add(lis);
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR data_list-->" + e.toString());
+        }
+        return rlista;
+    }
+    
+    public static boolean isRangeControl(String fechaSeg, String fechaControl){        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fecha = LocalDate.parse(fechaControl, formatter);
+        LocalDate fechaBase = LocalDate.parse(fechaSeg, formatter);
+        LocalDate fechaMin = fechaBase.minusDays(10);
+        LocalDate fechaMax = fechaBase.plusDays(10);
+        return !fecha.isBefore(fechaMin) && !fecha.isAfter(fechaMax);
     }
 
 }

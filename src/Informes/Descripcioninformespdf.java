@@ -240,7 +240,7 @@ public class Descripcioninformespdf {
             writer.setPageEvent(new Informespdf(Encabezado));
 
             //documento.setMargins(R, L, T, B);
-            documento.setMargins(20, 20, 10, 35);
+            documento.setMargins(20, 20, 10, 35);  
             //        if(!hoja.equals("Carta"))
             //            documento.setMargins(20, 20, 10,40);
 
@@ -321,7 +321,7 @@ public class Descripcioninformespdf {
 
         Image m1 = null;
         try {
-            m1 = Image.getInstance("Z:/Recursos/img/Logo.png"); //habilitar
+            m1 = Image.getInstance(Parametros.dirRecursos+"img/Logo.png"); //habilitar
         } catch (Exception ex) {
             System.err.println("Error: " + ex.getMessage());
         }
@@ -4517,25 +4517,50 @@ public class Descripcioninformespdf {
 
     private void infoNuevoReporte(Document documento, Map<String, String> list) {
         try {
+            System.out.println("infoNuevoReporte");
             PdfPCell celda = null;
             
-            String cons = "SELECT *,TIMESTAMPDIFF(YEAR,pe.fecha_de_nacimiento, CURDATE()) AS edad "
-                    + "FROM facturas a JOIN pagos p ON p.pk_pago = a.`numero` JOIN modo_pago mp "
-                    + "ON mp.`pfk_pago`=p.`pk_pago` JOIN seguimiento_del_tratamiento st ON "
-                    + "a.pfk_paciente=st.`pfk_paciente` AND a.`fecha_pago` "
-                    + "BETWEEN DATE_ADD(st.`fecha_seguimiento`, INTERVAL -4 DAY) AND "
-                    + "DATE_ADD(st.`fecha_seguimiento`, INTERVAL 4 DAY) JOIN personas pe ON "
-                    + "a.`pfk_paciente`=CONCAT(pe.pfk_tipo_documento,pe.pk_persona) WHERE "
-                    + "a.`fecha_pago` BETWEEN '"+list.get("fini")+"' AND '"+list.get("ffin")+"';";
+            String pagosQuery = "SELECT  a.fecha as FECHAFACT, DATE(st.fecha_seguimiento) as FECHASEG,\n" +
+                    " CONCAT_WS(' ', pe.`primer_nombre`, IFNULL(pe.`segundo_nombre`,''), pe.`primer_apellido`, IFNULL(pe.`segundo_apellido`,'')) PACIENTE,\n" +
+                    " a.pfk_paciente as IDENTIFICACION, \n" +
+                    " p.total as VALORP,\n" +
+                    " TIMESTAMPDIFF(YEAR,pe.fecha_de_nacimiento, CURDATE()) AS EDAD,\n" +
+                    " st.observaciones as CONTROL -- , st.consecutivo , st.pfk_tratamiento, st.pfk_pago as fact, p.pk_pago as fPago\n" +
+                    "FROM facturas a \n" +
+                    "JOIN pagos p ON p.pk_pago = a.`numero` \n" +
+                    "JOIN modo_pago mp ON mp.`pfk_pago`=p.`pk_pago` \n" +
+                    "join pagosxconceptos pxc on pxc.pfk_pago  = p.pk_pago and pxc.pfk_paciente  = p.pfk_paciente\n" +
+                    "join conceptos c on c.pk_concepto  = pxc.pfk_concepto  \n" +
+                    "JOIN seguimiento_del_tratamiento st ON a.pfk_paciente=st.`pfk_paciente` and st.pfk_tratamiento  = c.fk_tratamiento and st.pfk_pago  = p.pk_pago\n" +
+                    "-- AND a.`fecha_pago` BETWEEN DATE_ADD(st.`fecha_seguimiento`, INTERVAL -4 DAY) AND DATE_ADD(st.`fecha_seguimiento`, INTERVAL 4 DAY) \n" +
+                    "JOIN personas pe ON a.`pfk_paciente`=CONCAT(pe.pfk_tipo_documento,pe.pk_persona) \n" +
+                    "WHERE  a.estado  = 'pagado' and  \n" +
+                    "mp.pk_tipo_pago = 'Tarjeta' and \n" +
+                    "a.`fecha_pago` BETWEEN '"+list.get("fini")+"' AND '"+list.get("ffin")+"'\n" +
+                    "order by st.fecha_seguimiento asc";
+            
+            String controlsQuery = "select DATE(sdt.fecha_seguimiento) as FECHASEG, sdt.consecutivo as CONSECUTIVO, sdt.pfk_paciente as IDENTIFICACION, sdt.observaciones as CONTROL\n" +
+                                    "from seguimiento_del_tratamiento sdt \n" +
+                                    "where sdt.fecha_seguimiento  BETWEEN '"+list.get("fini")+"' AND '"+list.get("ffin")+"'  \n" +
+                                    "and sdt.pfk_pago = '000000000' order by sdt.fecha_seguimiento asc";
 
-            List<Map<String, String>> listaDatos = resultquery.ListSQL(cons);
+            List<Map<String, String>> listaDatos = resultquery.ListSQL(pagosQuery);
+            List<Map<String, String>> controlsList = resultquery.ListSQL(controlsQuery);
+                        
+            
             System.out.println("cantidad de datos datos: " + listaDatos.size());
 
-            if (listaDatos.size() == 1) {
-                float[] tam = new float[]{5, 45, 25, 25};
+            if (!listaDatos.isEmpty()) {
+                float[] tam = new float[]{10, 15, 30, 7, 10, 28};
                 PdfPTable tabla = new PdfPTable(tam);
                 tabla.setWidthPercentage(100);
-                celda = new PdfPCell(new Phrase("N°", pdf.font10n));
+                celda = new PdfPCell(new Phrase("FECHA", pdf.font10n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setBorder(15);
+                tabla.addCell(celda);
+                celda = new PdfPCell(new Phrase("IDENTIFICACION", pdf.font10n));
                 celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                 celda.setVerticalAlignment(Element.ALIGN_CENTER);
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -4547,7 +4572,7 @@ public class Descripcioninformespdf {
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 celda.setBorder(15);
                 tabla.addCell(celda);
-                celda = new PdfPCell(new Phrase("N° FACTURA", pdf.font10n));
+                celda = new PdfPCell(new Phrase("EDAD", pdf.font10n));
                 celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                 celda.setVerticalAlignment(Element.ALIGN_CENTER);
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -4558,7 +4583,106 @@ public class Descripcioninformespdf {
                 celda.setVerticalAlignment(Element.ALIGN_CENTER);
                 celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 celda.setBorder(15);
+                tabla.addCell(celda);              
+                celda = new PdfPCell(new Phrase("CONTROL", pdf.font10n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                celda.setBorder(15);
                 tabla.addCell(celda);
+                
+                
+                
+                for(int i = 0; i < listaDatos.size(); i++){
+                    celda = new PdfPCell(new Phrase(""+listaDatos.get(i).get("FECHASEG"), pdf.font8));
+                    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                    celda.setBorder(15);
+                    tabla.addCell(celda);
+                    
+                    celda = new PdfPCell(new Phrase("" + listaDatos.get(i).get("IDENTIFICACION"), pdf.font8));
+                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                    celda.setBorder(15);
+                    tabla.addCell(celda);
+                    
+                    celda = new PdfPCell(new Phrase("" + listaDatos.get(i).get("PACIENTE"), pdf.font8));
+                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                    celda.setBorder(15);
+                    tabla.addCell(celda);
+                    
+                    celda = new PdfPCell(new Phrase("" + listaDatos.get(i).get("EDAD"), pdf.font8));
+                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                    celda.setBorder(15);
+                    tabla.addCell(celda);
+                    
+                    celda = new PdfPCell(new Phrase("" + Utilidades.formatomoneda(listaDatos.get(i).get("VALORP")), pdf.font8));
+                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                    celda.setBorder(15);
+                    tabla.addCell(celda);
+                    
+                    celda = new PdfPCell(new Phrase("" + getControl(listaDatos.get(i), controlsList), pdf.font8));
+                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                    celda.setBorder(15);
+                    tabla.addCell(celda);
+                }
+//                
+//                List<Map<String, String>> listaPacientes = Utilidades.data_list(1, listaDatos, new String[] {"IDENTIFICACION"});
+//                for(int i = 0; i < listaPacientes.size(); i++){
+//                    
+//                    List<Map<String, String>> listaData = Utilidades.data_list(3, listaDatos, new String[] {"IDENTITIFICACION<->"+listaPacientes.get(i).get("IDENTITIFICACION")});
+//                    List<Map<String, String>> controlsPatientList = Utilidades.data_list(3, controlsList, new String[] {"IDENTITIFICACION<->"+listaPacientes.get(i).get("IDENTITIFICACION")});
+//                    
+//                    
+//                    
+//                    
+//                    celda = new PdfPCell(new Phrase("" + (i + 1), pdf.font10));
+//                    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+//                    celda.setBorder(15);
+//                    tabla.addCell(celda);
+//                    celda = new PdfPCell(new Phrase("" + resql.get(i)[0], pdf.font10));
+//                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+//                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+//                    celda.setBorder(15);
+//                    tabla.addCell(celda);
+//                    celda = new PdfPCell(new Phrase("" + resql.get(i)[1], pdf.font10));
+//                    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+//                    celda.setBorder(15);
+//                    tabla.addCell(celda);
+//                    celda = new PdfPCell(new Phrase("" + resql.get(i)[2].toLowerCase(), pdf.font10));
+//                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+//                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+//                    celda.setBorder(15);
+//                    tabla.addCell(celda);
+//                    celda = new PdfPCell(new Phrase("" + resql.get(i)[3], pdf.font10));
+//                    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    celda.setVerticalAlignment(Element.ALIGN_CENTER);
+//                    celda.setBorder(15);
+//                    tabla.addCell(celda);
+//                }
+                
+                documento.add(tabla);
+            }
+            else {
+                celda = null;
+
+                PdfPTable tabla = new PdfPTable(1);
+                tabla.setWidthPercentage(100);
+
+                celda = new PdfPCell(new Phrase("No se encontraron registros.", pdf.font15n));
+                celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celda.setVerticalAlignment(Element.ALIGN_CENTER);
+                celda.setBorder(15);
+                tabla.addCell(celda);
+
+                documento.add(tabla);
+
             }
 
             IMPRIMIR("Informe creado!");
@@ -4973,6 +5097,22 @@ public class Descripcioninformespdf {
 
     private PdfPTable getEncabezadoFacturaPorEstado(Map<String, String> list, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private String getControl(Map<String, String> data, List<Map<String, String>> controlsList) {
+        String result = data.get("CONTROL").equals("ABONO A TRATAMIENTO") ? "" : data.get("CONTROL");
+        
+        List<Map<String, String>> controls = Utilidades.data_list(3, controlsList, new String[] {"IDENTIFICACION<->"+data.get("IDENTIFICACION")});
+        if(controls.isEmpty()){
+            return data.get("CONTROL");
+        }
+        for(int i = 0; i < controls.size(); i++){
+            if(Utilidades.isRangeControl(data.get("FECHASEG"), controls.get(i).get("FECHASEG"))){
+                result += result.isEmpty() ? "": "\n" + controls.get(i).get("CONTROL");
+            }
+        }
+        
+        return result;
     }
 
 }

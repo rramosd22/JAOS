@@ -5,6 +5,8 @@ import HISTORIA_CLINICA.Diente;
 import HISTORIA_CLINICA.ventana;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.*;
@@ -284,15 +286,29 @@ public class Expresiones {
     }
 
     public static void main(String[] args) {
-//        GenerarPassword();
-        //System.out.println(contiene("12..122354", "12"));
+        // Tu fecha como cadena
+        String fechaCadena = "2020-08-28";
+        String fechaCadena2 = "2020-08-20";
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-//        String dato = ""+ sdf.format(Calendar.getInstance());
-//        for (int i = 0; i < 12; i++) {
-//            dato += (int)(Math.random()*10);
-//        }
-//        System.out.println(dato);
+        // Formato de la cadena
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Parsear a LocalDate
+        LocalDate fecha = LocalDate.parse(fechaCadena, formatter);
+
+        // Fecha base para comparar
+        LocalDate fechaBase = LocalDate.parse(fechaCadena2, formatter);
+
+        // Calcular rango ± 5 días
+        LocalDate fechaMin = fechaBase.minusDays(10);
+        LocalDate fechaMax = fechaBase.plusDays(10);
+
+        // Comparar si está en el rango
+        boolean dentroRango = !fecha.isBefore(fechaMin) && !fecha.isAfter(fechaMax);
+
+        System.out.println("Fecha: " + fecha);
+        System.out.println("Rango: " + fechaMin + " - " + fechaMax);
+        System.out.println("¿Está en rango? " + dentroRango);
     }
 
     public static boolean ValidarTipoPacienteAO(String texto) {
