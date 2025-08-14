@@ -561,5 +561,9 @@ public class Utilidades {
         LocalDate fechaMax = fechaBase.plusDays(10);
         return !fecha.isBefore(fechaMin) && !fecha.isAfter(fechaMax);
     }
+    
+    public static void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(null, mensaje);
+    }
 
 }

@@ -8,6 +8,7 @@ package Vistas;
 import Busquedas.ventanaBusquedapacienteinf;
 import Informes.Descripcioninformespdf;
 import Utilidades.Utilidades;
+import static Utilidades.Utilidades.mostrarMensaje;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -31,6 +31,8 @@ public class VentanaInformes extends javax.swing.JFrame {
 
     private static final String MESSAGE_DATES_NOT_SET = "Por favor diligencie "
             + "la(s) fecha(s) para poder generar el informe";
+
+    private static final String MENSAJE_MEDIOS_DE_PAGO = "Por favor seleccione al menos un medio de pago.";
 
     public ArrayList<int[]> listaPosiciones;
     public ArrayList<String[]> listacategorias = new ArrayList<>();
@@ -397,7 +399,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                     return;
                 }
 
-                if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
+                if (sonCamposInvalidos(Arrays.asList(initialDate, finalDate))) {
                     JOptionPane.showMessageDialog(
                             null,
                             MESSAGE_DATES_NOT_SET
@@ -420,7 +422,7 @@ public class VentanaInformes extends javax.swing.JFrame {
 
                 Date time = jdFechainicial.getCalendar().getTime();
 
-                if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
+                if (sonCamposInvalidos(Arrays.asList(initialDate, finalDate))) {
                     JOptionPane.showMessageDialog(
                             null,
                             MESSAGE_DATES_NOT_SET
@@ -440,7 +442,7 @@ public class VentanaInformes extends javax.swing.JFrame {
 
                 String initialDate = getDateByControl(jdFechainicial);
 
-                if (areDatesInvalid(Arrays.asList(initialDate))) {
+                if (sonCamposInvalidos(Arrays.asList(initialDate))) {
                     JOptionPane.showMessageDialog(
                             null,
                             MESSAGE_DATES_NOT_SET
@@ -459,7 +461,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                 String initialDate = getDateByControl(jdFechainicial);
                 String finalDate = getDateByControl(jdFechafinal);
 
-                if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
+                if (sonCamposInvalidos(Arrays.asList(initialDate, finalDate))) {
                     JOptionPane.showMessageDialog(
                             null,
                             MESSAGE_DATES_NOT_SET
@@ -489,7 +491,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                     return;
                 }
 
-                if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
+                if (sonCamposInvalidos(Arrays.asList(initialDate, finalDate))) {
                     JOptionPane.showMessageDialog(
                             null,
                             MESSAGE_DATES_NOT_SET
@@ -525,11 +527,14 @@ public class VentanaInformes extends javax.swing.JFrame {
                 String esEfectivo = String.valueOf(chkEfectivo.isSelected());
                 String esTarjeta = String.valueOf(chkTarjeta.isSelected());
                 String orientacion = Utilidades.getSelectedButtonText(bgOrientacionHoja);
-
-                if (areDatesInvalid(Arrays.asList(initialDate, finalDate))) {
-                    JOptionPane.showMessageDialog(
-                            null, MESSAGE_DATES_NOT_SET
-                    );
+                
+                String mensaje = getMensajeDeValidacion(
+                        Arrays.asList(initialDate, finalDate),
+                        Arrays.asList(esEfectivo, esTarjeta)
+                );
+                
+                if(!mensaje.isEmpty()) {
+                    mostrarMensaje(mensaje);
                     return;
                 }
 
@@ -1739,17 +1744,35 @@ public class VentanaInformes extends javax.swing.JFrame {
 
     }
 
-    private boolean areDatesInvalid(List<String> listOfDates) {
+    private boolean sonCamposInvalidos(List<String> campos) {
 
-        List<String> emptyDates = new ArrayList<>();
-        for (String emptyDate : listOfDates) {
-            if (emptyDate.equals("")) {
-                emptyDates.add(emptyDate);
+        List<String> camposVacios = new ArrayList<>();
+        for (String campo : campos) {
+            if (campo.equals("")) {
+                camposVacios.add(campo);
             }
         }
 
-        return !emptyDates.isEmpty();
+        return !camposVacios.isEmpty();
 
+    }
+
+    private String getMensajeDeValidacion(
+            List<String> fechas, List<String> mediosDePago
+    ) {
+        if (sonCamposInvalidos(fechas)) {
+            return MESSAGE_DATES_NOT_SET;
+        }
+        
+        if (sonCamposInvalidos(mediosDePago) || ningunoSeleccionado(mediosDePago)) {
+            return MENSAJE_MEDIOS_DE_PAGO;
+        }
+        
+        return "";
+    }
+    
+    private boolean ningunoSeleccionado(List<String> campos){
+        return campos.stream().allMatch(mp->mp.equals("false"));
     }
 
 }

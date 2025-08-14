@@ -20,7 +20,9 @@ public class Parametros {
 //    public static String dirInformes = "D:/INFORMES/";//"Z:/INFORMES/"; 
     //public static String dirInformes = "Z:/INFORMES/";//"Z:/INFORMES/"; JAOS
 //    public static String dirInformes = "Z:/INFORMES/";
-    public static String dirInformes = "C:/Informes/";//"Z:/INFORMES/";
+//    public static String dirInformes = "C:/Informes/";//"Z:/INFORMES/";
+    //solo para pruebas en UBUNTU
+    public static String dirInformes = "/home/dolf/Music/INFORMES/";//"Z:/INFORMES/";
 //    public static String dirRecursos = "Z:/Recursos/";//"Z:/INFORMES/";
     public static String dirRecursos = "C:/Recursos/";//"Z:/INFORMES/";
     public static String separadorDecimal = ",";

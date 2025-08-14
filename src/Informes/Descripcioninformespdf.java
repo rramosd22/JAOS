@@ -7,6 +7,7 @@ package Informes;
 
 import BaseDeDatos.gestorMySQL;
 import Control.ControlGeneral;
+import Modelo.MediosDePago;
 import Utilidades.Parametros;
 import Utilidades.Utilidades;
 import com.itextpdf.text.BaseColor;
@@ -29,6 +30,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 import javax.swing.JOptionPane;
 
 /**
@@ -42,6 +45,9 @@ public class Descripcioninformespdf {
     Informespdf pdf = new Informespdf();
     private static final String FORMAT_DATE_INPUT = "yyyy-MM-dd";
     private static final String FORMAT_DATE_OUTPUT = "EEEEE, d 'de' MMMMM 'del' yyyy";
+    private static final String EFECTIVO = "Efectivo";
+    private static final String TARJETA = "Tarjeta";
+
 
     ControlGeneral gen = new ControlGeneral();
 
@@ -4520,6 +4526,14 @@ public class Descripcioninformespdf {
             System.out.println("infoNuevoReporte");
             PdfPCell celda = null;
             
+            String mediosDePago = Stream.of(
+                    new MediosDePago(EFECTIVO, Boolean.valueOf(list.get("efectivo"))),
+                    new MediosDePago(TARJETA, Boolean.valueOf(list.get("tarjeta")))
+            )
+            .filter(MediosDePago::estaSeleccionado)
+            .map(MediosDePago::toString)
+            .collect(joining(","));
+            
             String pagosQuery = "SELECT  a.fecha as FECHAFACT, DATE(st.fecha_seguimiento) as FECHASEG,\n" +
                     " CONCAT_WS(' ', pe.`primer_nombre`, IFNULL(pe.`segundo_nombre`,''), pe.`primer_apellido`, IFNULL(pe.`segundo_apellido`,'')) PACIENTE,\n" +
                     " a.pfk_paciente as IDENTIFICACION, \n" +
@@ -4535,7 +4549,7 @@ public class Descripcioninformespdf {
                     "-- AND a.`fecha_pago` BETWEEN DATE_ADD(st.`fecha_seguimiento`, INTERVAL -4 DAY) AND DATE_ADD(st.`fecha_seguimiento`, INTERVAL 4 DAY) \n" +
                     "JOIN personas pe ON a.`pfk_paciente`=CONCAT(pe.pfk_tipo_documento,pe.pk_persona) \n" +
                     "WHERE  a.estado  = 'pagado' and  \n" +
-                    "mp.pk_tipo_pago = 'Tarjeta' and \n" +
+                    "mp.pk_tipo_pago in(" + mediosDePago + ") and \n" +
                     "a.`fecha_pago` BETWEEN '"+list.get("fini")+"' AND '"+list.get("ffin")+"'\n" +
                     "order by st.fecha_seguimiento asc";
             
