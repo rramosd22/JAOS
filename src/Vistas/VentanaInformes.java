@@ -1659,6 +1659,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         lblMedioPago.setText("Medio de Pago");
 
         chkEfectivo.setText("Efectivo");
+        chkEfectivo.setSelected(true);
 
         chkTarjeta.setText("Tarjeta");
 

@@ -4528,6 +4528,7 @@ public class Descripcioninformespdf {
         try {
             System.out.println("infoNuevoReporte");
             PdfPCell celda = null;
+            Boolean esAgrupado = Boolean.valueOf(list.get("agrupado"));
             
             String mediosDePago = Stream.of(
                     new MediosDePago(EFECTIVO, Boolean.valueOf(list.get("efectivo"))),
@@ -4630,13 +4631,13 @@ public class Descripcioninformespdf {
                     tabla.addCell(celda);
                     
                     celda = new PdfPCell(new Phrase("" + listaDatos.get(i).get("EDAD"), pdf.font8));
-                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
                     celda.setVerticalAlignment(Element.ALIGN_CENTER);
                     celda.setBorder(15);
                     tabla.addCell(celda);
                     
                     celda = new PdfPCell(new Phrase("" + Utilidades.formatomoneda(listaDatos.get(i).get("VALORP")), pdf.font8));
-                    celda.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     celda.setVerticalAlignment(Element.ALIGN_CENTER);
                     celda.setBorder(15);
                     tabla.addCell(celda);
@@ -5125,7 +5126,7 @@ public class Descripcioninformespdf {
         }
         for(int i = 0; i < controls.size(); i++){
             if(Utilidades.isRangeControl(data.get("FECHASEG"), controls.get(i).get("FECHASEG"))){
-                result += result.isEmpty() ? "": "\n" + controls.get(i).get("CONTROL");
+                result += (result.isEmpty() ? "": "\n") + controls.get(i).get("CONTROL");
             }
         }
         

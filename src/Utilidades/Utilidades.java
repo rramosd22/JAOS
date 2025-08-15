@@ -4,6 +4,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -233,30 +235,18 @@ public class Utilidades {
     }
 
     public static String formatomoneda(String costo) {
-        String caux = "";
-        String cfin = "";
-        int control = 0;
-        boolean entero = validarSoloNumeros(costo);
+        if(costo == null){
+            return "";
+        }
 
-        if (!costo.equals("") && entero) {
-            Pattern pat = Pattern.compile("^[0-9]+$");
-            Matcher mat = pat.matcher(costo);
-            if (mat.matches()) {
-                System.out.println("SI");
-                for (int i = costo.length() - 1; i >= 0; i--) {
-                    control++;
-                    caux += costo.charAt(i);
-                    if (control % 3 == 0 && i != 0) {
-                        caux += ".";
-                    }
-                }
-                for (int j = caux.length() - 1; j >= 0; j--) {
-                    cfin += caux.charAt(j);
-                }
-                return ("$ " + cfin);
-            } else {
-                return "";
-            }
+        if (!costo.equals("") && validarSoloNumeros(costo)) {
+            DecimalFormat formato = new DecimalFormat("'$' #,###");
+            DecimalFormatSymbols simbolos = formato.getDecimalFormatSymbols();
+            simbolos.setGroupingSeparator('.');
+            formato.setDecimalFormatSymbols(simbolos);
+            
+            double valor = Double.parseDouble(costo);            
+           return formato.format(valor);
         }
         return "";
     }
