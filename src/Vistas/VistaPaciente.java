@@ -6,19 +6,14 @@
 package Vistas;
 
 import BaseDeDatos.gestorMySQL;
-import Busquedas.ventanaBusquedaPaciente;
 import Busquedas.ventanaBusquedaPacienteN;
-import Busquedas.ventanaBusquedaTratamientos;
 import Control.ControlPaciente;
 import Informes.PlantillasAdicionales;
 import Tabla.NumberTableCellRenderer;
 import Utilidades.Expresiones;
 import Utilidades.Utilidades;
 import Utilidades.datosUsuario;
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
-import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

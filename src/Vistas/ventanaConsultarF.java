@@ -7,18 +7,14 @@ package Vistas;
 
 import BaseDeDatos.gestorMySQL;
 import Busquedas.ventanaBusquedaPacFact;
-import Busquedas.ventanaBusquedacConceptoFactura;
 import Control.ControlConcepto;
 import Control.ControlFacturas;
 import Informes.DescripcionFactura;
 import Informes.Descripcioninformespdf;
-import Modelo.Usuario;
 import Utilidades.Expresiones;
 import Utilidades.Utilidades;
 import Utilidades.datosUsuario;
 import java.awt.event.KeyEvent;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,26 +22,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
