@@ -69,7 +69,7 @@ public class VentanaInformes extends javax.swing.JFrame {
     public javax.swing.JCheckBox chFotografia = new javax.swing.JCheckBox();
     public javax.swing.JCheckBox chCefalometricoTodas = new javax.swing.JCheckBox();
     public javax.swing.JCheckBox chCefalometrico = new javax.swing.JCheckBox();
-    
+
     private javax.swing.ButtonGroup bgOrientacionHoja;
     private javax.swing.JCheckBox chkEfectivo;
     private javax.swing.JCheckBox chkTarjeta;
@@ -529,13 +529,13 @@ public class VentanaInformes extends javax.swing.JFrame {
                 String esTarjeta = String.valueOf(chkTarjeta.isSelected());
                 String esAgrupado = String.valueOf(chkAgruparPaciente.isSelected());
                 String orientacion = Utilidades.getSelectedButtonText(bgOrientacionHoja);
-                
+
                 String mensaje = getMensajeDeValidacion(
                         Arrays.asList(initialDate, finalDate),
                         Arrays.asList(esEfectivo, esTarjeta)
                 );
-                
-                if(!mensaje.isEmpty()) {
+
+                if (!mensaje.isEmpty()) {
                     mostrarMensaje(mensaje);
                     return;
                 }
@@ -658,7 +658,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         listainformes.add(new String[]{"2", "3", "Recaudo por Mes"});
         listainformes.add(new String[]{"2", "4", "Recaudo Tipo Pago"});
         listainformes.add(new String[]{"2", "5", "Abono por Pacientes"});
-        listainformes.add(new String[]{"2", "6", "Nuevo Reporte"});
+        listainformes.add(new String[]{"2", "6", "RIPS DIAN"});
         listainformes.add(new String[]{"3", "0", "Pacientes Auxiliares"});
         listainformes.add(new String[]{"3", "1", "Pacientes Activos"});
         //listainformes.add(new String[]{"3","2","Pacientes Terminados"});
@@ -1633,7 +1633,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         rbHorizontal = new javax.swing.JRadioButton();
         rbVertical = new javax.swing.JRadioButton();
         lblOrientacionHoja = new javax.swing.JLabel();
-        
+
         PanelOpciones.setBackground(new java.awt.Color(255, 255, 255));
         PanelOpciones.setForeground(new java.awt.Color(21, 67, 96));
         PanelOpciones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -1659,9 +1659,9 @@ public class VentanaInformes extends javax.swing.JFrame {
         lblMedioPago.setText("Medio de Pago");
 
         chkEfectivo.setText("Efectivo");
-        chkEfectivo.setSelected(true);
 
         chkTarjeta.setText("Tarjeta");
+        chkTarjeta.setSelected(true);
 
         lblOrientacionHoja.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblOrientacionHoja.setForeground(new java.awt.Color(21, 67, 96));
@@ -1670,7 +1670,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         bgOrientacionHoja.add(rbVertical);
         rbVertical.setSelected(true);
         rbVertical.setText("Vertical");
-        
+
         bgOrientacionHoja.add(rbHorizontal);
         rbHorizontal.setText("Horizontal");
 
@@ -1679,73 +1679,73 @@ public class VentanaInformes extends javax.swing.JFrame {
         javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
         PanelOpciones.setLayout(PanelOpcionesLayout);
         PanelOpcionesLayout.setHorizontalGroup(
-            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                .addContainerGap()
-                        .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-                    .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                .addGap(171, 171, 171)
-                                .addComponent(lblTituloGeneral))
-                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(32, 32, 32)
+                                                .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
+                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                                .addGap(171, 171, 171)
+                                                                .addComponent(lblTituloGeneral))
+                                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addComponent(lblMedioPago)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(chkEfectivo)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(chkTarjeta))
+                                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addComponent(lblOrientacionHoja)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(rbVertical)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(rbHorizontal)))
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())
+                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(lblMedioPago)
-                                .addGap(18, 18, 18)
-                                .addComponent(chkEfectivo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(chkTarjeta))
-                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblOrientacionHoja)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbVertical)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rbHorizontal)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chkAgruparPaciente)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(chkAgruparPaciente)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelOpcionesLayout.setVerticalGroup(
-            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(lblTituloGeneral)
-                .addGap(32, 32, 32)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblFechaInicio)
-                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMedioPago)
-                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(chkEfectivo)
-                        .addComponent(chkTarjeta)))
-                .addGap(18, 18, 18)
-                .addComponent(chkAgruparPaciente)
-                .addGap(18, 18, 18)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(rbVertical)
-                        .addComponent(rbHorizontal))
-                    .addComponent(lblOrientacionHoja))
-                .addContainerGap(154, Short.MAX_VALUE))
+                PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblTituloGeneral)
+                                .addGap(32, 32, 32)
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lblFechaInicio)
+                                                .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                                                .addGap(15, 15, 15)
+                                                .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblMedioPago)
+                                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(chkEfectivo)
+                                                .addComponent(chkTarjeta)))
+                                .addGap(18, 18, 18)
+                                .addComponent(chkAgruparPaciente)
+                                .addGap(18, 18, 18)
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(rbVertical)
+                                                .addComponent(rbHorizontal))
+                                        .addComponent(lblOrientacionHoja))
+                                .addContainerGap(154, Short.MAX_VALUE))
         );
     }
 
@@ -1776,16 +1776,16 @@ public class VentanaInformes extends javax.swing.JFrame {
         if (sonCamposInvalidos(fechas)) {
             return MESSAGE_DATES_NOT_SET;
         }
-        
+
         if (sonCamposInvalidos(mediosDePago) || ningunoSeleccionado(mediosDePago)) {
             return MENSAJE_MEDIOS_DE_PAGO;
         }
-        
+
         return "";
     }
-    
-    private boolean ningunoSeleccionado(List<String> campos){
-        return campos.stream().allMatch(mp->mp.equals("false"));
+
+    private boolean ningunoSeleccionado(List<String> campos) {
+        return campos.stream().allMatch(mp -> mp.equals("false"));
     }
 
 }

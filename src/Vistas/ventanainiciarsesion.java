@@ -108,7 +108,6 @@ public class ventanainiciarsesion extends javax.swing.JFrame {
 
         txtusuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtusuario.setForeground(new java.awt.Color(31, 97, 141));
-        txtusuario.setText("sadmin");
         txtusuario.setBorder(null);
         txtusuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -124,16 +123,15 @@ public class ventanainiciarsesion extends javax.swing.JFrame {
 
         txtcontrasena.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtcontrasena.setForeground(new java.awt.Color(31, 97, 141));
-        txtcontrasena.setText("1234");
         txtcontrasena.setBorder(null);
-        txtcontrasena.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcontrasenaActionPerformed(evt);
-            }
-        });
         txtcontrasena.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtcontrasenaFocusLost(evt);
+            }
+        });
+        txtcontrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcontrasenaActionPerformed(evt);
             }
         });
         txtcontrasena.addKeyListener(new java.awt.event.KeyAdapter() {
