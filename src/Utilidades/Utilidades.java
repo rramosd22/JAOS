@@ -1,9 +1,10 @@
 package Utilidades;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -24,12 +25,20 @@ import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
 public class Utilidades {
 
     public static String TEXTO_SIN_NUMEROS = "\\d";
     public static String SOLO_NUMEROS = "^[0-9]+$";
     public static String PACIENTES_AUXILIARES_OCASIONALES = "^[A|O]$";
+
+    public static ObjectMapper objectMapper = new ObjectMapper();
 
     public static void EstablecerIcono(JFrame vent) {
         vent.setIconImage(Toolkit.getDefaultToolkit().getImage(vent.getClass().getResource("/img/Logo.png")));
@@ -235,7 +244,7 @@ public class Utilidades {
     }
 
     public static String formatomoneda(String costo) {
-        if(costo == null){
+        if (costo == null) {
             return "";
         }
 
@@ -244,9 +253,9 @@ public class Utilidades {
             DecimalFormatSymbols simbolos = formato.getDecimalFormatSymbols();
             simbolos.setGroupingSeparator('.');
             formato.setDecimalFormatSymbols(simbolos);
-            
-            double valor = Double.parseDouble(costo);            
-           return formato.format(valor);
+
+            double valor = Double.parseDouble(costo);
+            return formato.format(valor);
         }
         return "";
     }
@@ -389,7 +398,7 @@ public class Utilidades {
         }
         return null;
     }
-    
+
     public static List<Map<String, String>> data_list(int caso, List<Map<String, String>> lista, String[] datos) {
         List<Map<String, String>> rlista = new ArrayList<>();
         try {
@@ -436,7 +445,8 @@ public class Utilidades {
                     }
                     break;
                 }
-                case 2: {////para listar datos por la key mandada y el valor mandado
+                case 2: {
+                    ////para listar datos por la key mandada y el valor mandado
                     for (Map<String, String> lis : lista) {
                         if (lis.get(datos[0]).equals(datos[1])) {
                             rlista.add(lis);
@@ -473,7 +483,8 @@ public class Utilidades {
     public static List<Map<String, String>> data_list(int caso, List<Map<String, String>> lista, String[] datos, String[] datos2) {
         List<Map<String, String>> rlista = new ArrayList<>();
         try {
-            switch (caso) {  //////////////LISTAR DATOS POR VECTOR dE COiNCIDENCIAS              
+            switch (caso) {
+                //////////////LISTAR DATOS POR VECTOR dE COiNCIDENCIAS              
                 case 1: {//Distinct con where compuesto
                     for (Map<String, String> lis : lista) {
                         int coincidencias = 0;
@@ -542,8 +553,8 @@ public class Utilidades {
         }
         return rlista;
     }
-    
-    public static boolean isRangeControl(String fechaSeg, String fechaControl){        
+
+    public static boolean isRangeControl(String fechaSeg, String fechaControl) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fecha = LocalDate.parse(fechaControl, formatter);
         LocalDate fechaBase = LocalDate.parse(fechaSeg, formatter);
@@ -551,9 +562,31 @@ public class Utilidades {
         LocalDate fechaMax = fechaBase.plusDays(10);
         return !fecha.isBefore(fechaMin) && !fecha.isAfter(fechaMax);
     }
-    
+
     public static void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje);
+    }
+
+    public static String stringify(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException ex) {
+            mostrarMensaje("Error serializando el archivo JSON");
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void crearArchivo(String ruta, String contenido) {
+        try {
+            Files.write(
+                    Paths.get(ruta),
+                    contenido.getBytes(),
+                    CREATE,
+                    TRUNCATE_EXISTING
+            );
+        } catch (IOException e) {
+            mostrarMensaje("Error creando el archivo JSON");
+        }
     }
 
 }

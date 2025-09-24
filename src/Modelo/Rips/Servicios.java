@@ -14,6 +14,6 @@ import lombok.Data;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Servicios {
+public class Servicios {
     private List<Consulta> consultas;
 }

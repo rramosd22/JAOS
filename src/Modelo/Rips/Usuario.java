@@ -5,15 +5,15 @@
 package Modelo.Rips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.Builder;
 
 /**
  *
  * @author PC
  */
-@Data
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Usuario {
+public class Usuario {
     private String tipoDocumentoIdentificacion;
     private String numDocumentoIdentificacion;
     private String tipoUsuario;

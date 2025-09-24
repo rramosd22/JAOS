@@ -5,16 +5,16 @@
 package Modelo.Rips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-
+import lombok.Builder;
+import java.math.BigDecimal;
 
 /**
  *
  * @author PC
  */
-@Data
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Consulta {
+public class Consulta {
     private String codPrestador;
     private String fechaInicioAtencion;
     private String numAutorizacion;
@@ -31,9 +31,9 @@ class Consulta {
     private String tipoDiagnosticoPrincipal;
     private String tipoDocumentoIdentificacion;
     private String numDocumentoIdentificacion;
-    private double vrServicio;
+    private BigDecimal vrServicio;
     private String conceptoRecaudo;
-    private double valorPagoModerador;
+    private BigDecimal valorPagoModerador;
     private String numFEVPagoModerador;
     private int consecutivo;
 }

@@ -7,10 +7,12 @@ package Vistas;
 
 import Busquedas.ventanaBusquedapacienteinf;
 import Informes.Descripcioninformespdf;
+import Informes.Rips.InformeJson;
 import Utilidades.Utilidades;
 import static Utilidades.Utilidades.mostrarMensaje;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,6 +72,7 @@ public class VentanaInformes extends javax.swing.JFrame {
     public javax.swing.JCheckBox chCefalometricoTodas = new javax.swing.JCheckBox();
     public javax.swing.JCheckBox chCefalometrico = new javax.swing.JCheckBox();
 
+    private javax.swing.JLabel lblCargando;
     private javax.swing.ButtonGroup bgOrientacionHoja;
     private javax.swing.JCheckBox chkEfectivo;
     private javax.swing.JCheckBox chkTarjeta;
@@ -84,6 +87,7 @@ public class VentanaInformes extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbHorizontal;
     private javax.swing.JRadioButton rbVertical;
     private int x, y;
+    private int RIPS = 7;
 
     /**
      * Creates new form VentanaInformes
@@ -548,6 +552,32 @@ public class VentanaInformes extends javax.swing.JFrame {
                 list.put("agrupado", esAgrupado);
 
                 System.out.println("map: " + list.toString());
+            } else if (inf == RIPS) { 
+
+                String initialDate = getDateByControl(jdcFechaInicio);
+                String finalDate = getDateByControl(jdcFechaFin);
+                String esEfectivo = String.valueOf(chkEfectivo.isSelected());
+                String esTarjeta = String.valueOf(chkTarjeta.isSelected());
+
+                String mensaje = getMensajeDeValidacion(
+                        Arrays.asList(initialDate, finalDate),
+                        Arrays.asList(esEfectivo, esTarjeta)
+                );
+
+                if (!mensaje.isEmpty()) {
+                    mostrarMensaje(mensaje);
+                    return;
+                }
+
+                list.put("fini", initialDate);
+                list.put("ffin", finalDate);
+                list.put("efectivo", esEfectivo);
+                list.put("tarjeta", esTarjeta);
+
+                System.out.println("map: " + list.toString());
+                InformeJson rips = new InformeJson();
+                rips.GenerarInforme(cat, inf, list);
+                return;
             }
         } else if (cat == 3) {
             if (inf == 0) {//Pacientes Auxiliares
@@ -658,7 +688,8 @@ public class VentanaInformes extends javax.swing.JFrame {
         listainformes.add(new String[]{"2", "3", "Recaudo por Mes"});
         listainformes.add(new String[]{"2", "4", "Recaudo Tipo Pago"});
         listainformes.add(new String[]{"2", "5", "Abono por Pacientes"});
-        listainformes.add(new String[]{"2", "6", "RIPS DIAN"});
+        listainformes.add(new String[]{"2", "6", "Nuevo Reporte"});
+        listainformes.add(new String[]{"2", "7", "RIPS DIAN"});
         listainformes.add(new String[]{"3", "0", "Pacientes Auxiliares"});
         listainformes.add(new String[]{"3", "1", "Pacientes Activos"});
         //listainformes.add(new String[]{"3","2","Pacientes Terminados"});
@@ -687,8 +718,6 @@ public class VentanaInformes extends javax.swing.JFrame {
 
     private void SeleccionarCategoria() {
         int ind = listCategoria.getSelectedIndex();
-        //System.out.println("ind----->"+ind);
-        //ind = getCategoria(modlistCategorias.getElementAt());
         llenarInforme("" + ind);
     }
 
@@ -777,6 +806,8 @@ public class VentanaInformes extends javax.swing.JFrame {
                 MostrarOpcHistCitas();
             } else if (indI == 6) {//Nuevo Reporte
                 MostrarNuevoReporte();
+            } else if (indI == 7) {//RIPS DIAN (JSON)
+                MostrarReporteRips();
             }
         } else if (indC == 3) {
             ////Paciente
@@ -1619,6 +1650,10 @@ public class VentanaInformes extends javax.swing.JFrame {
         pintarVistaInforme();
     }
 
+    private void MostrarReporteRips() {
+        pintarVistaInformeRips();
+    }
+
     private void pintarVistaInforme() {
         bgOrientacionHoja = new javax.swing.ButtonGroup();
         lblTituloGeneral = new javax.swing.JLabel();
@@ -1786,6 +1821,102 @@ public class VentanaInformes extends javax.swing.JFrame {
 
     private boolean ningunoSeleccionado(List<String> campos) {
         return campos.stream().allMatch(mp -> mp.equals("false"));
+    }
+
+    private void pintarVistaInformeRips() {
+        lblTituloGeneral = new javax.swing.JLabel();
+        lblFechaInicio = new javax.swing.JLabel();
+        jdcFechaInicio = new com.toedter.calendar.JDateChooser();
+        jdcFechaFin = new com.toedter.calendar.JDateChooser();
+        lblFechaFin = new javax.swing.JLabel();
+        lblMedioPago = new javax.swing.JLabel();
+        chkEfectivo = new javax.swing.JCheckBox();
+        chkTarjeta = new javax.swing.JCheckBox();
+        lblCargando = new javax.swing.JLabel();
+        
+        lblTituloGeneral.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lblTituloGeneral.setForeground(new java.awt.Color(21, 67, 96));
+        lblTituloGeneral.setText("Opciones");
+
+        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFechaInicio.setForeground(new java.awt.Color(21, 67, 96));
+        lblFechaInicio.setText("Fecha Inicio");
+
+        jdcFechaInicio.setForeground(new java.awt.Color(21, 67, 96));
+
+        jdcFechaFin.setForeground(new java.awt.Color(21, 67, 96));
+
+        lblFechaFin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFechaFin.setForeground(new java.awt.Color(21, 67, 96));
+        lblFechaFin.setText("Fecha Fin");
+
+        lblMedioPago.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMedioPago.setForeground(new java.awt.Color(21, 67, 96));
+        lblMedioPago.setText("Medio de Pago");
+
+        chkEfectivo.setText("Efectivo");
+
+        chkTarjeta.setText("Tarjeta");
+
+        lblCargando.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblCargando.setForeground(new java.awt.Color(21, 67, 96));
+        lblCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
+        PanelOpciones.setLayout(PanelOpcionesLayout);
+        PanelOpcionesLayout.setHorizontalGroup(
+            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
+                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                .addGap(171, 171, 171)
+                                .addComponent(lblTituloGeneral))
+                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblMedioPago)
+                                .addGap(18, 18, 18)
+                                .addComponent(chkEfectivo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(chkTarjeta)))
+                        .addGap(0, 163, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        PanelOpcionesLayout.setVerticalGroup(
+            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(lblTituloGeneral)
+                .addGap(28, 28, 28)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFechaInicio)
+                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMedioPago)
+                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(chkEfectivo)
+                        .addComponent(chkTarjeta)))
+                .addGap(115, 115, 115)
+                .addComponent(lblCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
+        );
     }
 
 }
