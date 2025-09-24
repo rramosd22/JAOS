@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import java.time.LocalDateTime;
 
 public class Utilidades {
 
@@ -589,4 +590,10 @@ public class Utilidades {
         }
     }
 
+    public static String formatearFecha(
+            LocalDateTime fecha, DateTimeFormatter formateador
+    ){
+        return fecha.format(formateador);
+    }
+    
 }

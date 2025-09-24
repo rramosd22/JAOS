@@ -12,7 +12,9 @@ import Utilidades.Utilidades;
 import static Utilidades.Utilidades.mostrarMensaje;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
+import static java.lang.Boolean.TRUE;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -34,7 +36,11 @@ public class VentanaInformes extends javax.swing.JFrame {
     private static final String MESSAGE_DATES_NOT_SET = "Por favor diligencie "
             + "la(s) fecha(s) para poder generar el informe";
 
-    private static final String MENSAJE_MEDIOS_DE_PAGO = "Por favor seleccione al menos un medio de pago.";
+    private static final String MENSAJE_MEDIOS_DE_PAGO = "Por favor seleccione "
+            + "al menos un medio de pago.";
+
+    private static final String MENSAJE_FECHAS_INVALIDAS = "La Fecha incial no "
+            + "puede ser superior a la Fecha final";
 
     public ArrayList<int[]> listaPosiciones;
     public ArrayList<String[]> listacategorias = new ArrayList<>();
@@ -805,7 +811,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                 MostrarOpcHistCitas();
             } else if (indI == 6) {//Nuevo Reporte
                 MostrarNuevoReporte();
-            } else if (indI == 7) {//RIPS DIAN (JSON)
+            } else if (indI == RIPS) {//RIPS DIAN (JSON)
                 MostrarReporteRips();
             }
         } else if (indC == 3) {
@@ -1792,7 +1798,6 @@ public class VentanaInformes extends javax.swing.JFrame {
     }
 
     private boolean sonCamposInvalidos(List<String> campos) {
-
         List<String> camposVacios = new ArrayList<>();
         for (String campo : campos) {
             if (campo.equals("")) {
@@ -1809,6 +1814,10 @@ public class VentanaInformes extends javax.swing.JFrame {
     ) {
         if (sonCamposInvalidos(fechas)) {
             return MESSAGE_DATES_NOT_SET;
+        }
+
+        if (sonFechasInvalidas(fechas)) {
+            return MENSAJE_FECHAS_INVALIDAS;
         }
 
         if (sonCamposInvalidos(mediosDePago) || ningunoSeleccionado(mediosDePago)) {
@@ -1856,6 +1865,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         chkEfectivo.setText("Efectivo");
 
         chkTarjeta.setText("Tarjeta");
+        chkTarjeta.setSelected(TRUE);
 
         lblCargando.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         lblCargando.setForeground(new java.awt.Color(21, 67, 96));
@@ -1921,7 +1931,7 @@ public class VentanaInformes extends javax.swing.JFrame {
     private void generarInformeJson(
             int cat, int inf, Map<String, String> list
     ) {
-        lblCargando.setText("Cargando espere...");
+        lblCargando.setText("Cargando, espere...");
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -1934,12 +1944,19 @@ public class VentanaInformes extends javax.swing.JFrame {
 
             @Override
             protected void done() {
-                
+
             }
         };
 
         worker.execute();
 
+    }
+
+    private boolean sonFechasInvalidas(List<String> fechas) {
+        LocalDate fechaInical = LocalDate.parse(fechas.get(0));
+        LocalDate fechaFinal = LocalDate.parse(fechas.get(1));
+
+        return fechaInical.isAfter(fechaFinal);
     }
 
 }

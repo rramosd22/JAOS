@@ -13,6 +13,7 @@ import Modelo.Rips.Usuario;
 import Utilidades.Parametros;
 import Utilidades.Utilidades;
 import static Utilidades.Utilidades.crearArchivo;
+import static Utilidades.Utilidades.formatearFecha;
 import static Utilidades.Utilidades.stringify;
 import Utilidades.datosUsuario;
 import java.awt.Desktop;
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +63,9 @@ public class InformeJson {
     private static final String CONCEPTO_RECAUDO = "05";
     private static final Integer CODIGO_SERVICIO = 338;
 
+    private static final String FORMATO_ENTRADA = "yyyy-MM-dd HH:mm:ss.S";
+    private static final String FORMATO_SALIDA = "yyyy-MM-dd HH:mm";
+
     private String Encode() {
         String cifrado = formatter.format(new Date()) + System.currentTimeMillis();
         return cifrado;
@@ -69,9 +75,7 @@ public class InformeJson {
             int categoria, int informe,
             Map<String, String> params
     ) {
-
-        String encode = Encode();
-        String nombre = "RP" + "_" + encode + ".json";
+        String nombre = "RP" + "_" + Encode() + ".json";
         String ruta = Parametros.dirInformesRips + nombre;
 
         String contenido = getInformeRips(params);
@@ -218,7 +222,9 @@ public class InformeJson {
             Map<String, String> map = data.get(i);
             consultas.add(Consulta.builder()
                     .consecutivo(consecutivo + i + 1)
-                    .fechaInicioAtencion(map.get("FECHA_ATENCION"))
+                    .fechaInicioAtencion(
+                            getFechaFormateada(map.get("FECHA_ATENCION"))
+                    )
                     .codPrestador(CODIGO_PRESTADOR)
                     .codConsulta(CODIGO_CONSULTA)
                     .modalidadGrupoServicioTecSal(MODALIDAD_GRUPO_SERVICIO_TECSAL)
@@ -238,6 +244,17 @@ public class InformeJson {
 
         servicios.setConsultas(consultas);
         return servicios;
+    }
+
+    private String getFechaFormateada(String fechaAtencion) {
+        LocalDateTime fechaAtencionParse = LocalDateTime.parse(
+                fechaAtencion,
+                DateTimeFormatter.ofPattern(FORMATO_ENTRADA)
+        );
+        return formatearFecha(
+                fechaAtencionParse,
+                DateTimeFormatter.ofPattern(FORMATO_SALIDA)
+        );
     }
 
 }

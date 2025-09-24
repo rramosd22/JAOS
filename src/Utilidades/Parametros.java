@@ -11,6 +11,15 @@ package Utilidades;
  * @author mary
  */
 public class Parametros {
+    
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    
+    private static boolean esLinux() {
+        return OS.contains("nux") ||
+                OS.contains("nix") || 
+                OS.contains("aix");
+    }
+    
 //    public static String dirRaiz = "Z:/PRUEBAS/";
     public static String dirRaiz = "C:/PRUEBAS/";
     //public static String dirRecursos = "D:/RECURSOS/";
@@ -21,7 +30,9 @@ public class Parametros {
     //public static String dirInformes = "Z:/INFORMES/";//"Z:/INFORMES/"; JAOS
 //    public static String dirInformes = "Z:/INFORMES/";
     public static String dirInformes = "C:/Informes/";//"Z:/INFORMES/";
-    public static String dirInformesRips = "C:/Informes/Rips/";//"Z:/INFORMES/";
+    public static String dirInformesRips =  esLinux() 
+            ? "/home/dolf/Music/RIPS/"
+            : "C:/Informes/Rips/";//"Z:/INFORMES/";
     //solo para pruebas en UBUNTU
 //    public static String dirInformes = "/home/dolf/Music/INFORMES/";//"Z:/INFORMES/";
 //    public static String dirRecursos = "Z:/Recursos/";//"Z:/INFORMES/";
