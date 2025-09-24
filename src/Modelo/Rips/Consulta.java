@@ -7,12 +7,14 @@ package Modelo.Rips;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import java.math.BigDecimal;
+import lombok.Getter;
 
 /**
  *
  * @author PC
  */
 @Builder
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Consulta {
     private String codPrestador;

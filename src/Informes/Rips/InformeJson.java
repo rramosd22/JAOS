@@ -75,7 +75,7 @@ public class InformeJson {
         String ruta = Parametros.dirInformesRips + nombre;
 
         String contenido = getInformeRips(params);
-
+        Utilidades.crearArchivo(ruta, contenido);
         int result = JOptionPane.showConfirmDialog(null, "¿Desea abrir el documento?");
         if (result == JOptionPane.YES_OPTION) {
             try {
@@ -216,7 +216,7 @@ public class InformeJson {
                     .valorPagoModerador(BigDecimal.ZERO)
                     .build());
         }
-
+        servicios.setConsultas(consultas);
         return servicios;
     }
 
