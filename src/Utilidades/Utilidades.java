@@ -567,16 +567,15 @@ public class Utilidades {
         JOptionPane.showMessageDialog(null, mensaje);
     }
 
-    public static String stringify(Object object) {
+    public static String stringify(Object object) throws Exception {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException ex) {
-            mostrarMensaje("Error serializando el archivo JSON");
-            throw new RuntimeException(ex);
+            throw new Exception("Error serializando el archivo JSON");
         }
     }
 
-    public static void crearArchivo(String ruta, String contenido) {
+    public static String crearArchivo(String ruta, String contenido) {
         try {
             Files.write(
                     Paths.get(ruta),
@@ -584,8 +583,9 @@ public class Utilidades {
                     CREATE,
                     TRUNCATE_EXISTING
             );
+            return "";
         } catch (IOException e) {
-            mostrarMensaje("Error creando el archivo JSON");
+            return "Error creando el archivo JSON";
         }
     }
 

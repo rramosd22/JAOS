@@ -12,7 +12,6 @@ import Utilidades.Utilidades;
 import static Utilidades.Utilidades.mostrarMensaje;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +23,7 @@ import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.*;
 
 /**
  *
@@ -552,7 +552,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                 list.put("agrupado", esAgrupado);
 
                 System.out.println("map: " + list.toString());
-            } else if (inf == RIPS) { 
+            } else if (inf == RIPS) {
 
                 String initialDate = getDateByControl(jdcFechaInicio);
                 String finalDate = getDateByControl(jdcFechaFin);
@@ -575,8 +575,7 @@ public class VentanaInformes extends javax.swing.JFrame {
                 list.put("tarjeta", esTarjeta);
 
                 System.out.println("map: " + list.toString());
-                InformeJson rips = new InformeJson();
-                rips.GenerarInforme(cat, inf, list);
+                generarInformeJson(cat, inf, list);
                 return;
             }
         } else if (cat == 3) {
@@ -1833,7 +1832,7 @@ public class VentanaInformes extends javax.swing.JFrame {
         chkEfectivo = new javax.swing.JCheckBox();
         chkTarjeta = new javax.swing.JCheckBox();
         lblCargando = new javax.swing.JLabel();
-        
+
         lblTituloGeneral.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblTituloGeneral.setForeground(new java.awt.Color(21, 67, 96));
         lblTituloGeneral.setText("Opciones");
@@ -1865,58 +1864,82 @@ public class VentanaInformes extends javax.swing.JFrame {
         javax.swing.GroupLayout PanelOpcionesLayout = new javax.swing.GroupLayout(PanelOpciones);
         PanelOpciones.setLayout(PanelOpcionesLayout);
         PanelOpcionesLayout.setHorizontalGroup(
-            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
-                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                .addGap(171, 171, 171)
-                                .addComponent(lblTituloGeneral))
-                            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblMedioPago)
-                                .addGap(18, 18, 18)
-                                .addComponent(chkEfectivo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(chkTarjeta)))
-                        .addGap(0, 163, Short.MAX_VALUE)))
-                .addContainerGap())
+                PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(lblFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(32, 32, 32)
+                                                .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jdcFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelOpcionesLayout.createSequentialGroup()
+                                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                                .addGap(171, 171, 171)
+                                                                .addComponent(lblTituloGeneral))
+                                                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addComponent(lblMedioPago)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(chkEfectivo)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(chkTarjeta)))
+                                                .addGap(0, 163, Short.MAX_VALUE)))
+                                .addContainerGap())
         );
         PanelOpcionesLayout.setVerticalGroup(
-            PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelOpcionesLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(lblTituloGeneral)
-                .addGap(28, 28, 28)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblFechaInicio)
-                        .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMedioPago)
-                    .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(chkEfectivo)
-                        .addComponent(chkTarjeta)))
-                .addGap(115, 115, 115)
-                .addComponent(lblCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
+                PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanelOpcionesLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblTituloGeneral)
+                                .addGap(28, 28, 28)
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lblFechaInicio)
+                                                .addComponent(jdcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesLayout.createSequentialGroup()
+                                                .addGap(15, 15, 15)
+                                                .addComponent(lblFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblMedioPago)
+                                        .addGroup(PanelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(chkEfectivo)
+                                                .addComponent(chkTarjeta)))
+                                .addGap(115, 115, 115)
+                                .addComponent(lblCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(83, Short.MAX_VALUE))
         );
+    }
+
+    private void generarInformeJson(
+            int cat, int inf, Map<String, String> list
+    ) {
+        lblCargando.setText("Cargando espere...");
+
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                InformeJson rips = new InformeJson();
+                String resultado = rips.GenerarInforme(cat, inf, list);
+                lblCargando.setText(resultado);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                
+            }
+        };
+
+        worker.execute();
+
     }
 
 }

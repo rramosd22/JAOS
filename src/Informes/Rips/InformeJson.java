@@ -12,20 +12,18 @@ import Modelo.Rips.Servicios;
 import Modelo.Rips.Usuario;
 import Utilidades.Parametros;
 import Utilidades.Utilidades;
-import static Utilidades.Utilidades.mostrarMensaje;
+import static Utilidades.Utilidades.crearArchivo;
 import static Utilidades.Utilidades.stringify;
 import Utilidades.datosUsuario;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Arrays;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import javax.swing.JOptionPane;
@@ -36,6 +34,7 @@ import javax.swing.JOptionPane;
  */
 public class InformeJson {
 
+    public String error = "";
     private gestorMySQL resultquery = new gestorMySQL();
     private static final String EFECTIVO = "Efectivo";
     private static final String TARJETA = "Tarjeta";
@@ -66,8 +65,9 @@ public class InformeJson {
         return cifrado;
     }
 
-    public void GenerarInforme(
-            int categoria, int informe, Map<String, String> params
+    public String GenerarInforme(
+            int categoria, int informe,
+            Map<String, String> params
     ) {
 
         String encode = Encode();
@@ -75,15 +75,22 @@ public class InformeJson {
         String ruta = Parametros.dirInformesRips + nombre;
 
         String contenido = getInformeRips(params);
-        Utilidades.crearArchivo(ruta, contenido);
+        if (contenido.isEmpty()) {
+            return error;
+        }
+
+        crearArchivo(ruta, contenido);
+
         int result = JOptionPane.showConfirmDialog(null, "¿Desea abrir el documento?");
         if (result == JOptionPane.YES_OPTION) {
             try {
                 Desktop.getDesktop().open(new File(ruta));
+                return "Proceso ejecutado con exito!";
             } catch (IOException ex) {
-                mostrarMensaje("No se pudo abrir el archivo "+nombre);
+                return "No se pudo abrir el archivo " + nombre;
             }
         }
+        return "Proceso ejecutado con exito!";
     }
 
     private String getInformeRips(Map<String, String> params) {
@@ -105,17 +112,22 @@ public class InformeJson {
                 + "pe.pfk_tipo_documento AS TIPO_DOCUMENTO,\n"
                 + "pe.pk_persona AS DOCUMENTO,\n"
                 + "pe.sexo as SEXO,\n"
-                + "CONCAT_WS(' ', pe.`primer_nombre`, IFNULL(pe.`segundo_nombre`,''), pe.`primer_apellido`, IFNULL(pe.`segundo_apellido`,'')) PACIENTE,\n"
+                + "CONCAT_WS(' ', pe.`primer_nombre`, "
+                + "IFNULL(pe.`segundo_nombre`,''), pe.`primer_apellido`,"
+                + " IFNULL(pe.`segundo_apellido`,'')) PACIENTE,\n"
                 + "pe.fecha_de_nacimiento as FECHA_NACIMIENTO\n"
                 + "FROM facturas a \n"
                 + "JOIN pagos p ON p.pk_pago = a.`numero` \n"
                 + "JOIN modo_pago mp ON mp.`pfk_pago`=p.`pk_pago` \n"
-                + "join pagosxconceptos pxc on pxc.pfk_pago=p.pk_pago and pxc.pfk_paciente=p.pfk_paciente\n"
+                + "join pagosxconceptos pxc on pxc.pfk_pago=p.pk_pago "
+                + "and pxc.pfk_paciente=p.pfk_paciente\n"
                 + "join conceptos c on c.pk_concepto  = pxc.pfk_concepto \n"
-                + "JOIN personas pe ON a.`pfk_paciente`=CONCAT(pe.pfk_tipo_documento,pe.pk_persona)\n"
+                + "JOIN personas pe ON "
+                + "a.`pfk_paciente`=CONCAT(pe.pfk_tipo_documento,pe.pk_persona)\n"
                 + "WHERE  a.estado='pagado' and c.fk_tipo_concepto=1 and \n"
                 + "mp.pk_tipo_pago in(" + mediosDePago + ") and \n"
-                + "a.`fecha_pago` BETWEEN '" + params.get("fini") + "' AND '" + params.get("ffin") + "';";
+                + "a.`fecha_pago` BETWEEN '" + params.get("fini") + "'"
+                + " AND '" + params.get("ffin") + "';";
 
         Integer consecutivo = getConsecutivo();
         Integer consecutivoServicio = 0;
@@ -127,6 +139,7 @@ public class InformeJson {
         );
 
         if (datos.isEmpty()) {
+            error = "No hay contenido para generar el archivo";
             return "";
         }
 
@@ -163,10 +176,15 @@ public class InformeJson {
             consecutivoServicio += data.size();
         }
         factura.setUsuarios(usuarios);
-        
+
         actualizarConsecutivo();
 
-        return stringify(factura);
+        try {
+            return stringify(factura);
+        } catch (Exception ex) {
+            error = ex.getMessage();
+            return "";
+        }
     }
 
     private Integer getConsecutivo() {
@@ -182,11 +200,11 @@ public class InformeJson {
             ArrayList<String> consultas = new ArrayList<String>();
             consultas.add(
                     "UPDATE consecutivo_rips SET consecutivo=consecutivo + 1,"
-                            + "usuario='" + datosUsuario.datos.get(0)[0] + "';"
+                    + "usuario='" + datosUsuario.datos.get(0)[0] + "';"
             );
             resultquery.EnviarConsultas(consultas);
         } catch (Exception ex) {
-            
+
         }
     }
 
@@ -200,6 +218,7 @@ public class InformeJson {
             Map<String, String> map = data.get(i);
             consultas.add(Consulta.builder()
                     .consecutivo(consecutivo + i + 1)
+                    .fechaInicioAtencion(map.get("FECHA_ATENCION"))
                     .codPrestador(CODIGO_PRESTADOR)
                     .codConsulta(CODIGO_CONSULTA)
                     .modalidadGrupoServicioTecSal(MODALIDAD_GRUPO_SERVICIO_TECSAL)
@@ -216,6 +235,7 @@ public class InformeJson {
                     .valorPagoModerador(BigDecimal.ZERO)
                     .build());
         }
+
         servicios.setConsultas(consultas);
         return servicios;
     }
