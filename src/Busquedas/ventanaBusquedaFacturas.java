@@ -1,15 +1,18 @@
 package Busquedas;
 
 import BaseDeDatos.gestorMySQL;
+import Modelo.FiltroBusqueda;
 import Utilidades.Expresiones;
 import Utilidades.Utilidades;
 import Vistas.VentanaAnularFactura;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
+import static java.util.stream.Collectors.toList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -69,8 +72,7 @@ public class ventanaBusquedaFacturas extends javax.swing.JFrame {
                 + "WHERE\n"
                 + "CONCAT(pfk_tipo_documento,pk_persona) = pfk_paciente\n"
                 + "AND estado IN('pagado')\n"
-                + "ORDER BY\n"
-                + "numero ASC";
+                + "ORDER BY numero DESC";
 
         list_consul = gsql.ListSQL(SQL);
         if (list_consul.size() > 0) {
@@ -593,38 +595,23 @@ public class ventanaBusquedaFacturas extends javax.swing.JFrame {
         }
     }
 
-    private List<Map<String, String>> getFiltroLista(String filtro) {
-        java.util.List<Map<String, String>> retorno = new ArrayList<>();
-        System.out.println("***************getFiltroLista*****************" + filtro);
-        int b = -1;
-        String[] filtros = filtro.isEmpty()?null:filtro.replace(" ", "<::>").split("<::>");
-        String valores = "";
-        for (int i = 0; i < list_consul.size(); i++) {
-            b = 1;
-            if (filtro.isEmpty()) {
-                retorno.add(list_consul.get(i));
-            } else {
-                valores = "";
-                for (int j = 0; j < NameColumnas.length; j++) {
-                    System.out.println("NAme-" + j + "->" + NameColumnas[j]);
-                    String value = list_consul.get(i).get(NameColumnas[j]);
-                    valores += ""+value; 
-//                    System.out.println("value--->" + value);
-//                    int con = value.toUpperCase().indexOf(filtro.toUpperCase());
-//                    System.out.println("con--->" + con);
-//                    if (con >= 0) {
-//                        b = 0;
-//                        break;
-//                    }
-                }
-                boolean encontro = Expresiones.filtrobusqueda(filtros,valores);
-                System.out.println("i-"+i+"-b-"+b);
-                if(encontro){
-                    retorno.add(list_consul.get(i));
-                }
-            }
+     private List<Map<String, String>> getFiltroLista(String filtro) {
+        List<Map<String, String>> retorno = new ArrayList<>();
+
+        List<String> filtros = Arrays.stream(filtro.split(" "))
+                .collect(toList());
+
+        for (String f : filtros) {
+            retorno.addAll(
+                    list_consul.stream()
+                            .map(FiltroBusqueda::new)
+                            .filter(p -> p.getTextoRegistro().contains(f.toUpperCase()))
+                            .map(FiltroBusqueda::getRegistro)
+                            .collect(toList())
+            );
+
         }
-        System.out.println("********************retorno --> " + retorno.size() + "***********************");
+
         return retorno;
     }
 }
